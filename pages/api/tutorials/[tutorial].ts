@@ -96,10 +96,6 @@ const handler = async (req: Request, res: Response) => {
       })
     );
 
-    //display necessary mesage
-
-    console.log("media data is", mediaData)
-
     res.send({
       mediaData
     });

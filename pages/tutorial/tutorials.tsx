@@ -28,7 +28,7 @@ const Lessons = ({ lessons }: Props) => {
 
   return (
     <div className="prose mx-auto my-12 mx-12">
-      {data?.others && data?.others?.len > 0 ? (
+      {data?.purchased && data?.purchased?.len > 0 ? (
         <>
           {" "}
           <h1 className="text-2xl mx-12 my-12">Lessons You Purchased</h1>

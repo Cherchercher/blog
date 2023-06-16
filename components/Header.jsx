@@ -25,7 +25,7 @@ const Header = () => {
             </span>
           </Link>
         </div>
-        <div className='hidden md:float-left md:contents'>
+        <div className='md:float-left md:contents'>
           {status ==='authenticated' ? (
             <Link href='/'>
               <span
