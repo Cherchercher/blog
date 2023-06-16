@@ -1,31 +1,30 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { CheckCircleIcon } from '@heroicons/react/outline';
+import { CheckCircleIcon } from "@heroicons/react/outline";
 
-import React from 'react';
-import { fetcher } from 'utils/SWRFetcher';
-import { LessonsResponse } from 'pages/api/lessons';
-import useSWR from 'swr';
+import React from "react";
+import { fetcher } from "utils/SWRFetcher";
+import { LessonsResponse } from "pages/api/lessons";
+import useSWR from "swr";
 
 const tier = {
-  name: 'Standard',
-  href: '#',
+  name: "Standard",
+  href: "#",
   price: 5,
-  description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit.',
+  description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
   features: [
-    'Private Discord Community',
-    'Access to online ebook',
-    'Access to resources list',
+    "Private Discord Community",
+    "Access to online ebook",
+    "Access to resources list",
   ],
 };
 
 export const Pricing = () => {
   const { data, error } = useSWR<LessonsResponse>(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/api/lessons`,
-    fetcher,
+    fetcher
   );
 
   console.log(data);
-  
 
   return (
     <>
@@ -99,24 +98,35 @@ export const Pricing = () => {
                     </div>
 
                     <>
-                    <button className="btn-icon-only" color="linkedin" type="button">
-        <span className="btn-inner--icon">
-          <i className="fab fa-linkedin"></i>
-        </span>
-      </button>
-      <button className="btn-icon-only" color="facebook" type="button">
-        <span className="btn-inner--icon">
-          <i className="fab fa-facebook"></i>
-        </span>
-      </button>
-      <button className="btn-icon-only" color="instagram" type="button">
-        {" "}
-        <span className="btn-inner--icon">
-          <i className="fab fa-instagram"></i>
-        </span>
-      </button>
-
-    </>
+                      <button
+                        className="btn-icon-only"
+                        color="linkedin"
+                        type="button"
+                      >
+                        <span className="btn-inner--icon">
+                          <i className="fab fa-linkedin"></i>
+                        </span>
+                      </button>
+                      <button
+                        className="btn-icon-only"
+                        color="facebook"
+                        type="button"
+                      >
+                        <span className="btn-inner--icon">
+                          <i className="fab fa-facebook"></i>
+                        </span>
+                      </button>
+                      <button
+                        className="btn-icon-only"
+                        color="instagram"
+                        type="button"
+                      >
+                        {" "}
+                        <span className="btn-inner--icon">
+                          <i className="fab fa-instagram"></i>
+                        </span>
+                      </button>
+                    </>
                   </div>
                 </div>
               </div>

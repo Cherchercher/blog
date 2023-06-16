@@ -1,16 +1,13 @@
 import Product from "./Product";
 
-interface IProductListProps {
-    products: IProduct[]
-}
+const ProductList = (props) => {
+  return (
+    <div className="product-list">
+      {props.products.map((product, index) => (
+        <Product product={product} key={index} />
+      ))}
+    </div>
+  );
+};
 
-const ProductList = (props: IProductListProps) => {
-    return (
-        <div className="product-list">
-            {props.products.map((product, index) => <Product product={product} key={index}/>)}
-        </div>
-    )
-}
-
-
-export default ProductList
+export default ProductList;

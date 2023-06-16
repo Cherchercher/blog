@@ -10,7 +10,7 @@ import { fetcher } from 'utils/SWRFetcher';
 import ContentLoader from 'react-content-loader';
 import { useRouter } from 'next/router';
 
-import CourseParts from 'components/course/CourseParts';
+import TutorialParts from 'components/course/TutorialParts';
 
 const LoadingSkeleton = () => {
   return (
@@ -104,7 +104,7 @@ if (error) {
   <nav>
     <ul>
       {data?.mediaData && (
-            <CourseParts lesson={lesson} parts={data?.mediaData}/>
+            <TutorialParts lesson={lesson} parts={data?.mediaData}/>
       )}
     </ul>
   </nav>

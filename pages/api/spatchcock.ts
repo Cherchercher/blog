@@ -8,12 +8,12 @@ export default async function handler(req, res) {
         line_items: [
           {
             // TODO: replace this with the `price` of the product you want to sell
-            //price_1NIn0SEqnc7ZXyoydEIuCHsL
+            // price_1NIn0SEqnc7ZXyoydEIuCHsL
             price: 'price_1NIn8aEqnc7ZXyoyQAzGQjHz',
             quantity: 1,
           },
         ],
-        metadata: {productId: req.query.productId},
+        metadata: { productId: req.query.productId },
         payment_method_types: ['card'],
         mode: 'payment',
         success_url: `${req.headers.origin}/login?purchaseSuccess=true`,

@@ -28,7 +28,7 @@ const Lessons = ({ lessons }: Props) => {
 
   return (
     <div className="prose mx-auto my-12 mx-12">
-      {data?.purchased?.len > 0 && (
+      {data?.others && data?.others?.len > 0 ? (
         <>
           {" "}
           <h1 className="text-2xl mx-12 my-12">Lessons You Purchased</h1>
@@ -51,9 +51,10 @@ const Lessons = ({ lessons }: Props) => {
             </div>
           </div>
         </>
-      )}
+      ) : (<><a className="text-2xl mx-12 my-12" href="/tutorials">No Tutorials Found. Purchase Here </a></>)
+      }
 
-      {data?.others && data?.others.length > 0 && (
+      {/* {data?.others && data?.others.length > 0 && (
         <div>
           <h1>All Tutorials</h1>
 
@@ -70,7 +71,7 @@ const Lessons = ({ lessons }: Props) => {
             ))}
           </ol>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

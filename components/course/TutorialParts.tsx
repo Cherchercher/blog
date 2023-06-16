@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import React from 'react';
 
-const CourseParts = (props) => {
-    let { courseId, parts, active, lesson,  ...rest } = props;
+const TutorialParts = (props) => {
+    let { parts, active } = props;
     return (
         <div>
         {active && parts?.map((part)=>(
@@ -20,4 +20,4 @@ const CourseParts = (props) => {
           </div >
     )
 }
-export default CourseParts
+export default TutorialParts

@@ -1,6 +1,6 @@
-import { getCsrfToken, getProviders } from 'next-auth/react';
-import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
+import { getCsrfToken, getProviders } from "next-auth/react";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
 
 export default function Login({ csrfToken }) {
   const {
@@ -15,11 +15,11 @@ export default function Login({ csrfToken }) {
       <div className="w-full mx-auto md:py-32 py-16 flex flex-col items-center justify-center">
         <div className="sm:mx-auto rounded-lg mt-10">
           <h2 className="text-center text-3xl leading-9">
-          {router.query?.purchaseSuccess == 'true' && (
-  <>
-    Thanks for your purchase! <br />
-  </>
-)}
+            {router.query?.purchaseSuccess == "true" && (
+              <>
+                Thanks for your purchase! <br />
+              </>
+            )}
             Log in to the course platform
           </h2>
 
@@ -58,7 +58,7 @@ export default function Login({ csrfToken }) {
                     type="email"
                     placeholder="you@company.com"
                     className="mb-3 focus:ring-blue-500 focus:border-blue-500  py-3 text-gray-900 placeholder-gray-400 focus:ring-tomato-500 focus:border-tomato-500 block w-full pl-10 border-2 border-gray-200 rounded-md"
-                    {...register('email', { required: true })}
+                    {...register("email", { required: true })}
                   />
                 </div>
 

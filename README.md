@@ -21,4 +21,9 @@ You'll also learn how to work with GraphCMS. GraphCMS is a headless content mana
  
  `kill -9 $(lsof -ti:3000)`
 
- 
+ `npm run build` before merge
+
+`git remote set-url origin https://PAToken@github.com/Cherchercher/project_graphql_blog.git`
+
+### TODO
+clean up build with ESLINT and TYPESCRIPT errors

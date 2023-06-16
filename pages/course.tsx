@@ -1,4 +1,4 @@
-import { Pricing } from 'components/course/Pricing';
+import { Pricing } from '/components/course/Pricing';
 import React from 'react';
 
 const Course = () => {

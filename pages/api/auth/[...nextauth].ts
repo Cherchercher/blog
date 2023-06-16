@@ -82,7 +82,8 @@ export default NextAuth({
   callbacks: {
     async redirect({ url, baseUrl }) {
       console.log(url, baseUrl);
-      return '/course/lessons';
+      
+      return '/tutorial/tutorials';
     },
   },
   pages: {

@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import debounce from 'lodash.debounce';
 
-import styles from '../styles/search.module.css'
+import styles from '../styles/search.module.css';
 
 const fakeResults = {
-  "status": "OK",
+  status: "OK",
   "candidates": [
       {
           "formatted_address": "6910 Melrose Ave, Los Angeles, CA 90038, United States",
@@ -85,6 +85,9 @@ const fakeResults = {
       }
   ]
 }
+
+console.log(fakeResults);
+
 export default function Accomondations() {
   const searchHotelRef = useRef(null)
 

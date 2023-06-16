@@ -1,6 +1,5 @@
-import ProductList from "../components/tutorials/ProductList";
-import halfmoonBettaPicture from "../public/images/halfmoon.jpg";
-import Jumbotron from "../components/tutorials/Jumbotron";
+import ProductList from "/components/tutorials/ProductList";
+import Jumbotron from "/components/tutorials/Jumbotron";
 
 export default function Tutorials({products}) {
     return (
@@ -23,7 +22,7 @@ export const products = [
         id: "spatchcock",
         name: "Master the Spatchcock",
         price: 25.00,
-        image: halfmoonBettaPicture,
+        image: '/images/halfmoon.jpg',
         description: "Rated 1.0 in IPSF code of point. Covers the flexibility, strength, and technique to get in and out of Spatchcock.",
         prereq: "No prerequsite to benefit. Progress at your own pace. \n Recommend ability to handspring to fully get the trick.",
         url: '/api/spatchcock'
