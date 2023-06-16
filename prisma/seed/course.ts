@@ -21,7 +21,7 @@ const featureList = [
 
 async function main() {
   const course = await prisma.course.upsert({
-    where: {courseBucket: 'course-nomadichacker'},
+    where: {courseBucket: 'tutorial-spatchcock'},
     // update: {
     //   courseBucket: 'course-nomadichacker',
     //   name: 'Nomadic Hacker',
@@ -40,7 +40,7 @@ async function main() {
       name: 'Master Spatchcock',
       price: 30,
       salesPrice: 30,
-      productId: "prod_O4wuJn9rU1aSBF",
+      productId: "prod_O4x2XFGbGOD7oR",
       pricingUnit: "USD",
       pricing: "Early Bird",
       instructor: "Cher Huang",
@@ -53,7 +53,7 @@ async function main() {
       name: 'Master Spatchcock',
       price: 30,
       salesPrice: 30,
-      productId: "prod_O4wuJn9rU1aSBF",
+      productId: "prod_O4x2XFGbGOD7oR",
       pricingUnit: "USD",
       pricing: "Early Bird",
       instructor: "Cher Huang",
