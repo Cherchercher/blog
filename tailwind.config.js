@@ -6,6 +6,11 @@ module.exports = {
       spacing: {
         '2/3': '66.666667%',
       },
+      colors: {
+        'primary': '#39B44A',
+        'shadowPrimary': '#E5E6E7',
+        'shadowSecondary': '#2F3A4F'
+      } ,
     },
   },
   variants: {
