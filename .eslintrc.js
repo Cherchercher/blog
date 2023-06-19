@@ -1,7 +1,7 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true,
+    es2019: true,
   },
   extends: [
     'plugin:react/recommended',
