@@ -1,6 +1,6 @@
 import { buffer } from 'micro';
 import { prisma } from 'lib/prisma';
-// import Stripe from 'stripe';
+import Stripe from 'stripe';
 import Cors from 'micro-cors';
 
 const cors = Cors({
@@ -8,11 +8,11 @@ const cors = Cors({
 });
 
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY_TEST!);
-// const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST!, {
-//   // https://github.com/stripe/stripe-node#configuration
-//   apiVersion: '2022-11-15',
-// })
+// const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY_TEST!);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST!, {
+  // https://github.com/stripe/stripe-node#configuration
+  apiVersion: '2022-11-15',
+})
 
 // let stripePromise: Promise<Stripe | null>;
 // const getStripe = () => {
@@ -28,7 +28,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY_TEST!);
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET_TEST;
 
 const handler = async (req, res) => {
-  if (req.method === 'POST') {
+  // if (req.method === 'POST') {
     const buf = await buffer(req);
     const sig = req.headers['stripe-signature'];
 
@@ -79,10 +79,10 @@ const handler = async (req, res) => {
     res.send();
     // console.log('redirecting to login');
     // res.redirect(200, '/login');
-  } else {
-    res.setHeader('Allow', 'POST');
-    res.status(405).end('Method Not Allowed');
-  }
+  // } else {
+  //   res.setHeader('Allow', 'POST');
+  //   res.status(404).end('Method Not Allowed');
+  // }
 };
 
 export default cors(handler);

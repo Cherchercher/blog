@@ -39,7 +39,7 @@
     "react-hook-form": "^7.43.5",
     "react-multi-carousel": "^2.6.5",
     "sass": "^1.42.1",
-    "stripe": "^11.11.0",
+    "stripe": "^12.9.0",
     "swr": "^1.0.1"
   },
   "devDependencies": {
