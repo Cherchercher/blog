@@ -4,7 +4,7 @@ const Jumbotron = () => (
   <>
     <div className={styles.promotional_message}>
       <p>
-        <strong>Detailed tutorials </strong> to get that trick.
+        <strong>Step-by-step tutorials </strong> to get that trick.
       </p>
       <h2>Be Pole Strong</h2>
       <p>
@@ -13,4 +13,5 @@ const Jumbotron = () => (
     </div>
   </>
 );
+
 export default Jumbotron;

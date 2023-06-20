@@ -18,6 +18,7 @@ export default async function handler(req, res) {
             quantity: 1,
           },
         ],
+        allow_promotion_codes: true,
         metadata: { productId: req.query.productId },
         payment_method_types: ['card'],
         mode: 'payment',
