@@ -21,7 +21,7 @@ export const products = [
     {
         id: "spatchcock",
         name: "Master the Spatchcock",
-        price: 25.00,
+        price: 30.00,
         image: '/images/spatchcock.png',
         description: "Rated 1.0 in IPSF code of point. Covers the flexibility, strength, and technique to get in and out of Spatchcock.",
         prereq: "No prerequsite to benefit. Progress at your own pace. \n Recommend ability to handspring to fully get the trick.",

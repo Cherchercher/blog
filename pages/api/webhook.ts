@@ -86,9 +86,3 @@ const handler = async (req, res) => {
 };
 
 export default cors(handler);
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
