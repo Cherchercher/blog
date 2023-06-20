@@ -73,7 +73,7 @@ export const Pricing = () => {
                         ))}
                       </ul>
                       <form
-                        action="/api/checkout?productId=prod_NNTSCDGlblRowA"
+                        action="/api/checkout?productId=prod_O4wuJn9rU1aSBF"
                         method="POST"
                       >
                         <section>
