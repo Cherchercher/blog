@@ -38,7 +38,7 @@ const handler = async (req: Request, res: Response) => {
     const s3 = new AWS.S3({
       credentials: {
         accessKeyId: process.env.AWS_ACCESS_ID,
-        secretAccessKey: process.env.AWS_ACCESS_KEY
+        secretAccessKey: process.env.AWS_ACCESS_SECRET
       }
     });
   
