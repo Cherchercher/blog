@@ -1,6 +1,6 @@
 import { buffer } from 'micro';
 import { prisma } from 'lib/prisma';
-// import Stripe from 'stripe';
+import Stripe from 'stripe';
 import Cors from 'micro-cors';
 
 const cors = Cors({
@@ -8,11 +8,11 @@ const cors = Cors({
 });
 
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY_TEST!);
-// const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST!, {
-//   // https://github.com/stripe/stripe-node#configuration
-//   apiVersion: '2022-11-15',
-// })
+// const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY_TEST!);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST!, {
+  // https://github.com/stripe/stripe-node#configuration
+  apiVersion: '2022-11-15',
+})
 
 // let stripePromise: Promise<Stripe | null>;
 // const getStripe = () => {
@@ -38,7 +38,6 @@ const handler = async (req, res) => {
       event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
     } catch (err) {
       res.status(400).end(`Webhook Error: ${err.message}`);
-      return;
     }
 
     if (event.type === 'checkout.session.completed') {
@@ -76,7 +75,7 @@ const handler = async (req, res) => {
     } else {
       console.warn(`Unhandled event type: ${event.type}`);
     }
-    res.send();
+    res.status(200).end(); 
   } else {
     res.setHeader('Allow', 'POST');
     res.status(404).end('Method Not Allowed');
