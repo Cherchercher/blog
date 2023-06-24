@@ -28,7 +28,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY_TEST!, {
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET_TEST;
 
 const handler = async (req, res) => {
-  // if (req.method === 'POST') {
+  if (req.method === 'POST') {
     const buf = await buffer(req);
     const sig = req.headers['stripe-signature'];
 
@@ -76,13 +76,10 @@ const handler = async (req, res) => {
     } else {
       console.warn(`Unhandled event type: ${event.type}`);
     }
-    res.send();
-    // console.log('redirecting to login');
-    // res.redirect(200, '/login');
-  // } else {
-  //   res.setHeader('Allow', 'POST');
-  //   res.status(404).end('Method Not Allowed');
-  // }
+    res.json({ received: true })
+    res.setHeader('Allow', 'POST');
+    res.status(404).end('Method Not Allowed');
+  }
 };
 
 export default cors(handler);
