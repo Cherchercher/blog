@@ -22,9 +22,9 @@ const Lessons = ({ lessons }: Props) => {
     fetcher
   );
 
-  console.log("data is");
-
-  console.log(data);
+  if (!data) {
+    return <h1>Loading...</h1>
+  }
 
   return (
     <div className="prose mx-auto my-12 mx-12">
