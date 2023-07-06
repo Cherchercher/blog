@@ -14,7 +14,7 @@ export default async function handler(req, res) {
       const session = await stripe.checkout.sessions.create({
         line_items: [
           {
-            price: 'price_1NIn0SEqnc7ZXyoydEIuCHsL',
+            price: process.env.SPATCHCOCK_PRODUCT_PRICE,
             quantity: 1,
           },
         ],

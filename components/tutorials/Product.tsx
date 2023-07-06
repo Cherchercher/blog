@@ -23,7 +23,7 @@ const Product = (props) => {
       <div className={product__price_button_container}>
         <div className={product__price}>${props.product.price.toFixed(2)}</div>
         <form
-          action="/api/spatchcock?productId=prod_O4wuJn9rU1aSBF"
+          action={`/api/spatchcock?productId=${process.env.SPATCHCOCK_PRODUCT_ID}`}
           method="POST"
         >
           <button className={product__button} type="submit" role="link">
