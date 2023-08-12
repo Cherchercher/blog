@@ -22,6 +22,8 @@ const Lessons = ({ lessons }: Props) => {
     fetcher
   );
 
+  console.log(data);
+
   if (!data) {
     return <h1>Loading...</h1>
   }

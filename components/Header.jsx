@@ -96,7 +96,13 @@ const Header = () => {
             //   </span>
             // </Link>
           )}
+            <Link key='inMyBag' href='/inMyBag'>
+              <span className='md:float-right mt-2 align-middle  ml-4 font-semibold cursor-pointer'>
+                In My Bag
+              </span>
+            </Link>
         </div>
+        
       </div>
     </div>
   );

@@ -20,6 +20,11 @@ const PostDetail = ({ post }) => {
       }
     }
 
+    console.log(obj, text);
+    console.log(type);
+    if (obj?.href) {
+      return <a href={obj.href}> {obj.children[0].text}</a>
+    }
     switch (type) {
       case 'heading-one':
         return <h1 key={index} className="text-3xl font-semibold mb-6">{modifiedText.map((item, i) => <React.Fragment key={i}>{item}</React.Fragment>)}</h1>;

@@ -3,6 +3,16 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 import { prisma } from "../../lib/prisma";
 
+import {
+  DynamoDBClient,
+  PutItemCommand,
+  GetItemCommand,
+  UpdateItemCommand,
+  DeleteItemCommand
+} from '@aws-sdk/client-dynamodb';
+
+const client = new DynamoDBClient({});
+
 interface Request extends NextApiRequest {
   query: {
     lesson: string;
@@ -25,38 +35,62 @@ const handler = async (req: Request, res: Response) => {
       ? isAfter(new Date(), parseISO(session.expires))
       : true;
 
-    if (isSessionExpired) {
-      res.redirect(200, "/tutorials");
-      return;
-      let courses = await prisma.course.findMany();
-      let data = await Promise.all(
-        courses.map(async (course) => {
-          const features = await prisma.feature.findMany({
-            where: { courseId: course.id },
-          });
+    // if (isSessionExpired) {
+    //   res.redirect(200, "/tutorials");
+    //   return;
+    //   let courses = await prisma.course.findMany();
+    //   let data = await Promise.all(
+    //     courses.map(async (course) => {
+    //       const features = await prisma.feature.findMany({
+    //         where: { courseId: course.id },
+    //       });
 
-          return {
-            ...course,
-            features: features.map((features) => features.description),
-          };
-        })
-      );
+    //       return {
+    //         ...course,
+    //         features: features.map((features) => features.description),
+    //       };
+    //     })
+    //   );
 
-      res.send({
-        purchased: null,
-        others: data,
-        errorMessage: null,
-      });
+    //   res.send({
+    //     purchased: null,
+    //     others: data,
+    //     errorMessage: null,
+    //   });
 
-      // return res.status(599).send({
-      //     errorMessage: "Session expired"
-      // })
-    }
+    //   // return res.status(599).send({
+    //   //     errorMessage: "Session expired"
+    //   // })
+    // }
 
     const email = session?.user?.email;
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
+    // const user = await prisma.user.findUnique({
+    //   where: { email, account type },
+    // });
+    // can use email as primary key
+
+    const { Item } = await client.send(
+      new GetItemCommand({
+        TableName: "User",
+        Key: {
+          email: { S: "xiaoxuah@uci.edu" }
+        }
+      })
+    );
+
+    console.log(Item)
+
+
+    const { Purchases } = await client.send(
+      new GetItemCommand({
+        TableName: "Purchase",
+        Key: {
+          email: { S: email }
+        }
+      })
+    );
+
+      
     const purchases = await prisma.purchase.findMany({
       where: { userId: user.id },
     });
