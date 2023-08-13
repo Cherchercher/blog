@@ -5,10 +5,7 @@ import { prisma } from "../../lib/prisma";
 
 import {
   DynamoDBClient,
-  PutItemCommand,
   GetItemCommand,
-  UpdateItemCommand,
-  DeleteItemCommand
 } from '@aws-sdk/client-dynamodb';
 
 const client = new DynamoDBClient({});
@@ -73,7 +70,8 @@ const handler = async (req: Request, res: Response) => {
       new GetItemCommand({
         TableName: "User",
         Key: {
-          email: { S: "xiaoxuah@uci.edu" }
+          email: { S: "xiaoxuah@uci.edu" },
+          account: { S: "BUYER"}
         }
       })
     );
@@ -89,11 +87,6 @@ const handler = async (req: Request, res: Response) => {
         }
       })
     );
-
-      
-    const purchases = await prisma.purchase.findMany({
-      where: { userId: user.id },
-    });
 
     const productIDs = purchases.map((purchase) => purchase.productId);
 

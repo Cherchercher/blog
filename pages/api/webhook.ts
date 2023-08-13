@@ -3,6 +3,17 @@ import { prisma } from 'lib/prisma';
 import Stripe from 'stripe';
 import Cors from 'micro-cors';
 
+import {
+  DynamoDBClient,
+  PutItemCommand,
+  GetItemCommand,
+  UpdateItemCommand,
+  DeleteItemCommand
+} from '@aws-sdk/client-dynamodb';
+
+const client = new DynamoDBClient({});
+
+
 const cors = Cors({
   allowMethods: ['POST', 'HEAD'],
 });
@@ -37,36 +48,46 @@ const handler = async (req, res) => {
     if (event.type === 'checkout.session.completed') {
       const charge = event.data.object;
       // Handle successful charge
-      const user = await prisma.user.upsert({
-        create: {
-          email: charge.customer_details.email,
+
+      const { Item } = await client.send(
+        new GetItemCommand({
+          TableName: "User",
+          Key: {
+            email: { S: "xiaoxuah@uci.edu" },
+            type: { S: "BUYER"}
+          }
+        })
+      );
+
+      const input = {
+        "Item": {
+          "email": { S: "xiaoxuah@uci.edu" },
+          "type": { S: "BUYER"}
         },
-        update: {
-          email: charge.customer_details.email,
-        },
-        where: {
-          email: charge.customer_details.email,
-        },
-      });
+        "ReturnConsumedCapacity": "TOTAL",
+        "TableName": "User"
+      };
+
+      if (!Item) {
+        const command = new PutItemCommand(input);
+        const response = await client.send(command);
+      }
+      
       try {
-        await prisma.purchase.upsert({
-          create: {
-            userId: user.id,
-            productId: charge.metadata.productId,
-            status: 'active',
+        // create purchase for User
+
+        const input = {
+          "Item": {
+            "email": { S: user.email },
+            "productId": { S: charge.metadata.productId},
+            "status": { S: "active" }
           },
-          update: {
-            userId: user.id,
-            productId: charge.metadata.productId,
-            status: 'active',
-          },
-          where: {
-            userId_productId: {
-              userId: user.id,
-              productId: charge.metadata.productId,
-            },
-          },
-        });
+          "ReturnConsumedCapacity": "TOTAL",
+          "TableName": "Purchase"
+        };
+  
+        const command = new PutItemCommand(input);
+        const response = await client.send(command);
       } catch (e) {
         console.log(e);
       }

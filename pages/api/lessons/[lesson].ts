@@ -5,6 +5,13 @@ import { getSession } from 'next-auth/react';
 import AWS from 'aws-sdk';
 import { prisma } from '../../../lib/prisma';
 
+import {
+  DynamoDBClient,
+  GetItemCommand,
+} from '@aws-sdk/client-dynamodb';
+
+const client = new DynamoDBClient({});
+
 interface Request extends NextApiRequest {
   query: {
     lesson: string;
@@ -27,13 +34,23 @@ const handler = async (req: Request, res: Response) => {
 
     const email = session?.user?.email;
 
-    const isPaidUser = email
-      ? await prisma.user.findUnique({
-          where: { email },
-        })
-      : false;
+    const { Item } = await client.send(
+      new GetItemCommand({
+        TableName: "User",
+        Key: {
+          email: { S: "xiaoxuah@uci.edu" },
+          type: { S: "BUYER"}
+        }
+      })
+    );
 
-      console.log(req.query);
+    // const isPaidUser = email
+    //   ? await prisma.user.findUnique({
+    //       where: { email },
+    //     })
+    //   : false;
+
+    //   console.log(req.query);
 
     //read from s3
     const s3 = new AWS.S3({
