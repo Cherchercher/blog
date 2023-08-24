@@ -2,14 +2,30 @@ import { isAfter, parseISO } from 'date-fns';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import AWS from 'aws-sdk';
-import { prisma } from '../../../lib/prisma';
 
 import {
-  DynamoDBClient,
-  GetItemCommand,
+  QueryCommand
 } from '@aws-sdk/client-dynamodb';
 
-const client = new DynamoDBClient({});
+
+import { DynamoDB, DynamoDBClientConfig } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+
+const config: DynamoDBClientConfig = {
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY as string,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
+  },
+  region: process.env.AWS_REGION,
+};
+
+const client = DynamoDBDocument.from(new DynamoDB(config), {
+  marshallOptions: {
+    convertEmptyValues: true,
+    removeUndefinedValues: true,
+    convertClassInstanceToMap: true,
+  },
+})
 
 interface Request extends NextApiRequest {
   query: {
@@ -31,23 +47,42 @@ const handler = async (req: Request, res: Response) => {
       ? isAfter(new Date(), parseISO(session.expires))
       : true;
 
+
     const email = session?.user?.email;
 
-    const { Item } = await client.send(
-      new GetItemCommand({
-        TableName: "User",
-        Key: {
-          email: { S: "xiaoxuah@uci.edu" },
-          type: { S: "BUYER"}
-        }
-      })
-    );
+    const params = {
+      TableName: "User",
+      IndexName: "email-accountType-index",
+      KeyConditionExpression: "email = :email and accountType = :accountType",
+      ExpressionAttributeValues: {
+        ":email": { S: email },
+        ":accountType": { S: "BUYER" },
+      },
+    };
+
+    const command = new QueryCommand(params);
+
+    const { Items: userItems } = await client.send(command);
+
+    let isPaidUser = true;
+    if (userItems.length === 0) {
+      isPaidUser = true
+    }
+
+
+    if (!isPaidUser || isSessionExpired) {
+      return res.send({
+        mediaData: null,
+      });
+    }
+
+    
 
     //read from s3
     const s3 = new AWS.S3({
       credentials: {
-        accessKeyId: process.env.AWS_ACCESS_ID,
-        secretAccessKey: process.env.AWS_ACCESS_SECRET
+        accessKeyId: process.env.AWS_ACCESS_KEY,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
       }
     });
   
@@ -56,7 +91,10 @@ const handler = async (req: Request, res: Response) => {
     // bucket is the "course"_ + cousename nomadichacker
     // key is the section_number_part_number
   
+    console.log("query is", req?.query);
     const bucket = req?.query?.tutorial;
+
+    console.log("bucket is", bucket)
 
     const listObjects = (Bucket) => {
       return new Promise ((resolve, reject) => {
@@ -91,11 +129,6 @@ const handler = async (req: Request, res: Response) => {
       });
     }
 
-    if (!isPaidUser || isSessionExpired) {
-      return res.send({
-        mediaData: null,
-      });
-    }
 
     let mediaData = [];
   

@@ -1,17 +1,31 @@
 import { isAfter, parseISO } from 'date-fns';
-import fs from 'fs';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import AWS from 'aws-sdk';
-import { prisma } from '../../../lib/prisma';
 
 import {
   DynamoDBClient,
   GetItemCommand,
 } from '@aws-sdk/client-dynamodb';
 
-const client = new DynamoDBClient({});
+import { DynamoDB, DynamoDBClientConfig } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
+const ddbconfig: DynamoDBClientConfig = {
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY as string,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
+  },
+  region: process.env.AWS_REGION,
+};
+
+const client = DynamoDBDocument.from(new DynamoDB(ddbconfig), {
+  marshallOptions: {
+    convertEmptyValues: true,
+    removeUndefinedValues: true,
+    convertClassInstanceToMap: true,
+  },
+})
 interface Request extends NextApiRequest {
   query: {
     lesson: string;
@@ -55,8 +69,8 @@ const handler = async (req: Request, res: Response) => {
     //read from s3
     const s3 = new AWS.S3({
       credentials: {
-        accessKeyId: process.env.AWS_ACCESS_ID,
-        secretAccessKey: process.env.AWS_ACCESS_SECRET
+        accessKeyId: process.env.AWS_ACCESS_KEY,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
       }
     });
   

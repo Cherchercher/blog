@@ -1,6 +1,7 @@
 import styles from "../../styles/Product.module.scss";
 
 const Product = (props) => {
+  console.log("in product", process.env.SPATCHCOCK_PRODUCT_ID, process.env.NEXT_PUBLIC_SERVER_URL)
   const {
     product,
     product__title,

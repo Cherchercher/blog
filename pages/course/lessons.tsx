@@ -35,6 +35,7 @@ const Lessons = ({ lessons }: Props) => {
       <div className="w-full">
         {data?.purchased.map((lesson) => (
           <Link
+            key={lesson.productId}
             as={`/course/${lesson.courseBucket}/1`}
             href={`/course/[lesson]/[section]`}
           >

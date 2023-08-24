@@ -24,6 +24,12 @@ $max-width: 1000px;
   }
 }
 
+@mixin biggerThanMobile {
+  @media (min-width: 600px) {
+    @content;
+  }
+}
+
 @mixin smallerThanDesktop {
   @media (max-width: 1000px) {
     @content;

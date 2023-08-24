@@ -26,6 +26,15 @@ export const products = [
         description: "Rated 1.0 in IPSF code of point. Covers the flexibility, strength, and technique to get in and out of Spatchcock.",
         prereq: "No prerequsite to benefit. Progress at your own pace. \n Recommend ability to handspring to fully get the trick.",
         url: '/api/spatchcock'
+    },
+    {
+        id: "marchenko",
+        name: "Rainbow Marchenko",
+        price: 30.00,
+        image: '/images/marchenko.png',
+        description: "Get bendy and strong. Master the technique and mobility needed for Rainbow Marchenko.",
+        prereq: "No prerequsite to benefit. Progress at your own pace. \n Recommend ability to Brass Monkey to rip the full benefits.",
+        url: '/api/marchenko'
     }
 ]
 

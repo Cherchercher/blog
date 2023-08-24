@@ -1,11 +1,30 @@
-import NextAuth from 'next-auth';
+import NextAuth, { NextAuthOptions } from 'next-auth';
 import EmailProvider from 'next-auth/providers/email';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { DynamoDB, DynamoDBClientConfig } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { SMTPClient } from 'emailjs';
-import { prisma } from 'lib/prisma';
+import { DynamoDBAdapter } from "@next-auth/dynamodb-adapter";
 
-export default NextAuth({
-  adapter: PrismaAdapter(prisma),
+const config: DynamoDBClientConfig = {
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY as string,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
+  },
+  region: process.env.AWS_REGION,
+};
+
+const client = DynamoDBDocument.from(new DynamoDB(config), {
+  marshallOptions: {
+    convertEmptyValues: true,
+    removeUndefinedValues: true,
+    convertClassInstanceToMap: true,
+  },
+})
+
+export const authOptions: NextAuthOptions = {
+  adapter: DynamoDBAdapter(
+    client
+  ),
   providers: [
     EmailProvider({
       server: {
@@ -89,8 +108,9 @@ export default NextAuth({
     signIn: '/login',
     error: '/error',
     verifyRequest: '/check-your-email',
-  },
-});
+  }
+}
+
 
 // Email HTML body
 function html({ url, host, email }: Record<'url' | 'host' | 'email', string>) {
@@ -147,3 +167,6 @@ function html({ url, host, email }: Record<'url' | 'host' | 'email', string>) {
 function text({ url, host }: Record<'url' | 'host', string>) {
   return `Sign in to ${host}\n${url}\n\n`;
 }
+
+
+export default NextAuth(authOptions)

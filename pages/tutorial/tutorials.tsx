@@ -6,6 +6,24 @@ import { fetcher } from "utils/SWRFetcher";
 import useSWR from "swr";
 import { GetStaticProps } from "next";
 
+import { authOptions } from "../api/auth/[...nextauth]"
+import { getServerSession } from "next-auth/next"
+import { useSession } from "next-auth/react"
+
+// 
+// export async function getServerSideProps(context) {
+//   return {
+//     props: {
+//       session: await getServerSession(
+//         context.req,
+//         context.res,
+//         authOptions
+//       ),
+//     },
+//   }
+// }
+
+
 interface Props {
   lessons: {
     content: string;
@@ -16,13 +34,17 @@ interface Props {
   }[];
 }
 
-const Lessons = ({ lessons }: Props) => {
+//using this one for now
+const Lessons = () => {
   const { data, error } = useSWR<LessonResponse>(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/api/lessons`,
     fetcher
   );
 
-  console.log(data);
+  const { data: session } = useSession()
+  if (!session) {
+    return <h1>Not Authorized. Please Login.</h1>
+  }
 
   if (!data) {
     return <h1>Loading...</h1>

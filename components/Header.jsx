@@ -14,6 +14,7 @@ const Header = () => {
     });
   }, []);
 
+  console.log("in header", process.env.NEXT_PUBLIC_SERVER_URL)
   return (
     <div className='container mx-auto px-10 mb-8'>
       <div className='border-b w-full inline-block border-secondaryShadow py-8'>
@@ -96,11 +97,11 @@ const Header = () => {
             //   </span>
             // </Link>
           )}
-            <Link key='inMyBag' href='/inMyBag'>
+            {/* <Link key='inMyBag' href='/inMyBag'>
               <span className='md:float-right mt-2 align-middle  ml-4 font-semibold cursor-pointer'>
                 In My Bag
               </span>
-            </Link>
+            </Link> */}
         </div>
         
       </div>
