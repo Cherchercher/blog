@@ -1,7 +1,7 @@
 import { isAfter, parseISO } from "date-fns";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth/next"
-import { authOptions } from "./auth/[...nextauth]"
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./auth/[...nextauth]";
 
 import { QueryCommand } from "@aws-sdk/client-dynamodb";
 
@@ -44,18 +44,19 @@ const handler = async (req: Request, res: Response) => {
   try {
     const session = await getServerSession(req, res, authOptions);
 
-    if (!session || session?.expires
-      ? isAfter(new Date(), parseISO(session.expires))
-      : true) {
-      res.writeHead(401, { Location: '/login' }).end()
-      return
+    if (
+      !session || session?.expires
+        ? isAfter(new Date(), parseISO(session.expires))
+        : true
+    ) {
+      res.writeHead(401, { Location: "/login" }).end();
+      return;
     }
-
 
     // if (isSessionExpired != 2) {
     //   console.log("in redirect")
     //   res.writeHead(307, { Location: '/login' }).end()
-    //   return 
+    //   return
     // }
 
     const email = session?.user?.email;
@@ -86,7 +87,7 @@ const handler = async (req: Request, res: Response) => {
 
     const { Items: purchased } = await client.send(purchaseCommand);
 
-    let data = await Promise.all(
+    let purchasedCourses = await Promise.all(
       purchased.map(async (purchase) => {
         const productId = purchase.productId["S"];
         const courseParams = {
@@ -98,13 +99,26 @@ const handler = async (req: Request, res: Response) => {
         const { Items: courses } = await client.send(courseCommand);
         return {
           ...purchase,
+          userId: purchase.userId["S"],
+          productId: purchase.productId["S"],
+          status: purchase.status["S"],
           courseBucket: courses[0].courseBucket["S"],
+          imageRelativeUrl: courses[0].imageRelativeUrl["S"],
         };
       })
     );
 
-    // const productIDs = PurchaseItems.map((purchase) => purchase.productId);
+    const productIDs = purchasedCourses.map((purchase) => purchase.productId);
 
+    const allCourses = {
+      TableName: "Course",
+      IndexName: "env-index",
+      KeyConditionExpression: "env = :env",
+      ExpressionAttributeValues: { ":env": { S: "TEST" } },
+    };
+
+    const coursesCommand = new QueryCommand(allCourses);
+    const { Items: courses } = await client.send(coursesCommand);
     // let courses = await prisma.course.findMany();
     // let data = await Promise.all(
     //   courses.map(async (course) => {
@@ -119,15 +133,45 @@ const handler = async (req: Request, res: Response) => {
     //   })
     // );
 
-    // const [purchased, others] = courses.reduce(
-    //   ([p, f], e) =>
-    //     productIDs.includes(e.productId) ? [[...p, e], f] : [p, [...f, e]],
-    //   [[], []]
-    // );
+    const [some, others] = courses.reduce(
+      ([p, f], e) =>
+        productIDs.includes(e.id["S"]) ? [[...p, e], f] : [p, [...f, e]],
+      [[], []]
+    );
 
+    const toPurchase = others.reduce((accu, other) => {
+      let otherItem = {};
+      Object.keys(other).forEach((key) => {
+        if (other[key].hasOwnProperty("S")) {
+          otherItem[key] = other[key]["S"];
+        } else {
+          otherItem[key] = other[key]["N"];
+        }
+      })
+      accu.push(otherItem);
+      return accu;
+    }
+    , []);
+
+
+    const alreadyPurchases = some.reduce((accu, other) => {
+      let otherItem = {};
+      Object.keys(other).forEach((key) => {
+        if (other[key].hasOwnProperty("S")) {
+          otherItem[key] = other[key]["S"];
+        } else {
+          otherItem[key] = other[key]["N"];
+        }
+      })
+      accu.push(otherItem);
+      return accu;
+    }
+    , []);
+
+    // console.log(purchasedCourses, toPurchase);
     res.send({
-      purchased: data,
-      others: [],
+      purchased: alreadyPurchases,
+      others: toPurchase,
       errorMessage: null,
     });
   } catch (error) {

@@ -13,6 +13,7 @@ With featured and recent posts, categories. full markdown articles, author infor
 
 You'll also learn how to work with GraphCMS. GraphCMS is a headless content management system based on GraphQL technology enabling seamless integration with any application.
 
+
 #primsa
 
  first time: `npx prisma generate`
@@ -26,5 +27,7 @@ You'll also learn how to work with GraphCMS. GraphCMS is a headless content mana
 <!-- npx prisma migrate dev --name first-migration -->
 ### TODO
 clean up build with ESLINT and TYPESCRIPT errors
+
+stripe listen --forward-to localhost:3000/api/webhook
 
 Stripe trigger checkout.session.completed --override checkout.session.completed.metadata['productId']=testing --override checkout.session.completed.customer_details['email']=xiaoxuah@uci.edu

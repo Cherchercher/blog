@@ -6,11 +6,13 @@ import { fetcher } from "utils/SWRFetcher";
 import useSWR from "swr";
 import { GetStaticProps } from "next";
 
-import { authOptions } from "../api/auth/[...nextauth]"
-import { getServerSession } from "next-auth/next"
-import { useSession } from "next-auth/react"
+import { authOptions } from "../api/auth/[...nextauth]";
+import { getServerSession } from "next-auth/next";
+import { useSession } from "next-auth/react";
+import Tutorials from "../tutorials";
 
-// 
+import styles from "../../styles/Product.module.scss";
+
 // export async function getServerSideProps(context) {
 //   return {
 //     props: {
@@ -22,7 +24,6 @@ import { useSession } from "next-auth/react"
 //     },
 //   }
 // }
-
 
 interface Props {
   lessons: {
@@ -41,13 +42,13 @@ const Lessons = () => {
     fetcher
   );
 
-  const { data: session } = useSession()
+  const { data: session } = useSession();
   if (!session) {
-    return <h1>Not Authorized. Please Login.</h1>
+    return <h1>Not Authorized. Please Login.</h1>;
   }
 
   if (!data) {
-    return <h1>Loading...</h1>
+    return <h1>Loading...</h1>;
   }
 
   return (
@@ -55,7 +56,7 @@ const Lessons = () => {
       {data?.purchased && data?.purchased?.length > 0 ? (
         <>
           {" "}
-          <h1 className="text-2xl mx-12 my-12">Lessons You Purchased</h1>
+          <h1 className="text-2xl mx-12 my-12">Purchased</h1>
           <div className="w-full mx-12">
             <div className="w-full">
               {data?.purchased.map((lesson) => (
@@ -63,8 +64,8 @@ const Lessons = () => {
                   as={`/tutorial/${lesson.courseBucket}`}
                   href={`/tutorial/[lesson]`}
                 >
-                  <div className="cursor-pointer flex">
-                    <img className="h-48 w-48" src="/images/spatchcock.png" />
+                  <div className="cursor-pointer flex mb-4">
+                    <img className="h-48 w-48" src={lesson.imageRelativeUrl} />
                     <div className="flex-3 mx-8">
                       <span className="text-xl font-bold">{lesson.name}</span>
                       <p className="text-l flex-3">{lesson.description}</p>
@@ -75,26 +76,58 @@ const Lessons = () => {
             </div>
           </div>
         </>
-      ) : (<><a className="text-2xl mx-12 my-12" href="/tutorials">No Tutorials Found. Purchase Here </a></>)
-      }
+      ) : (
+        <>
+          <a className="text-2xl mx-12 my-12" href="/tutorials">
+            No purchsaed tutorials. If this is a mistake, contact
+            cherhuang@goplanatrip.com{" "}
+          </a>
+        </>
+      )}
+
+      {data?.others && data?.others.length > 0 && (
+        <>
+          {" "}
+          <h1 className="text-2xl mx-12 my-12 mt-8 border-b py-8">Browse lessons</h1>
+          <div className="w-full mx-12">
+            <Tutorials products={data?.others} isClassRoom={true}></Tutorials>
+          </div>
+        </>
+      )}
 
       {/* {data?.others && data?.others.length > 0 && (
-        <div>
-          <h1>All Tutorials</h1>
+        <>
+          {" "}
+          <h1 className="text-2xl mx-12 my-12">Browse lessons</h1>
+          <div className="w-full mx-12">
+            <div className="w-full">
+              {data?.others.map((lesson) => (
+                // <Link
+                //   as={`/tutorial/${lesson.courseBucket}`}
+                //   href={`/tutorial/[lesson]`}
+                //   action={`/api/purchase?productId=${lesson.id}&priceId=${lesson.priceId}`}
 
-          <ol className="grid grid-cols-1 md:grid-cols-2">
-            {data?.others.map((lesson) => (
-              <li key={lesson.courseBucket}>
-                <Link  
-                  as={`/tutorial/${lesson.courseBucket}`}
-                  href={`/tutorial/[lesson]`}
-                >
-                  <a>{lesson.name}</a>
-                </Link>
-              </li>
-            ))}
-          </ol>
-        </div>
+                // >
+                <div className="cursor-pointer flex">
+                  <img className="h-48 w-48" src={lesson.imageRelativeUrl} />
+                  <div className="flex-3 mx-8">
+                    <span className="text-xl font-bold">{lesson.name}</span>
+                    <p className="text-l flex-3">{lesson.description}</p>
+                    <form
+                      action={`/api/purchase?productId=${lesson.id}&priceId=${lesson.priceId}`}
+                      method="POST"
+                    >
+                      <button type="submit" role="link">
+                        Purchase
+                      </button>
+                    </form>
+                  </div>
+                </div>
+                // </Link>
+              ))}
+            </div>
+          </div>
+        </>
       )} */}
     </div>
   );
