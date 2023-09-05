@@ -1,17 +1,10 @@
 import React from "react";
-import fs from "fs";
-import path from "path";
 import Link from "next/link";
 import { fetcher } from "utils/SWRFetcher";
 import useSWR from "swr";
-import { GetStaticProps } from "next";
 
-import { authOptions } from "../api/auth/[...nextauth]";
-import { getServerSession } from "next-auth/next";
 import { useSession } from "next-auth/react";
 import Tutorials from "../tutorials";
-
-import styles from "../../styles/Product.module.scss";
 
 // export async function getServerSideProps(context) {
 //   return {
