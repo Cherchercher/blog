@@ -80,17 +80,30 @@ const Header = () => {
             //     Lessons
             //   </span>
             // </Link>
-            <Link key='lessons' href='/tutorial/tutorials'>
+            <>
+            <Link key='lessons-pole' href='/tutorial/tutorials?courseType=SINGLE_VIDEO'>
               <span className='md:float-right mt-2 align-middle  ml-4 font-semibold cursor-pointer'>
-                Tutorials
+                Pole Tutorials
               </span>
             </Link>
+                        <Link key='lessons-software' href='/tutorial/tutorials?courseType=EBOOK'>
+                        <span className='md:float-right mt-2 align-middle  ml-4 font-semibold cursor-pointer'>
+                          Coding Lessons
+                        </span>
+                      </Link></>
           ) : (
-            <Link key='tutorials' href='/tutorials'>
+            <>
+            <Link key='tutorials-pole' href='/tutorials?courseType=SINGLE_VIDEO'>
               <span className='md:float-right mt-2 align-middle  ml-4 font-semibold cursor-pointer'>
-                Tutorials
+                Pole Tutorials
               </span>
             </Link>
+            <Link key='tutorials-software' href='/tutorials?courseType=EBOOK'>
+            <span className='md:float-right mt-2 align-middle  ml-4 font-semibold cursor-pointer'>
+            Coding Lessons
+            </span>
+          </Link>
+          </>
             // <Link key='nomadic-hacker-academy' href='/course'>
             //   <span className='md:float-right mt-2 align-middle  ml-4 font-semibold cursor-pointer'>
             //     Hacker Academy

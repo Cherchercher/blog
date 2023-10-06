@@ -8,7 +8,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY_TEST!);
 
 export default async function handler(req, res) {
-  console.log("SPATCH ID", req.query)
   if (req.method === 'POST') {
     try {
       // Create Checkout Sessions from body params.

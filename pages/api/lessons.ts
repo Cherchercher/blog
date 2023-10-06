@@ -28,6 +28,7 @@ const client = DynamoDBDocument.from(new DynamoDB(config), {
 interface Request extends NextApiRequest {
   query: {
     lesson: string;
+    courseType: string;
   };
 }
 
@@ -46,9 +47,9 @@ const handler = async (req: Request, res: Response) => {
 
     if (
       !session || session?.expires
-        ? isAfter(new Date(), parseISO(session.expires))
-        : true
+        ? isAfter(new Date(), parseISO(session.expires)) : true
     ) {
+      // res.redirect(401, "/login");
       res.writeHead(401, { Location: "/login" }).end();
       return;
     }
@@ -109,7 +110,6 @@ const handler = async (req: Request, res: Response) => {
     );
 
     const productIDs = purchasedCourses.map((purchase) => purchase.productId);
-
     const allCourses = {
       TableName: "Course",
       IndexName: "env-index",
@@ -118,7 +118,8 @@ const handler = async (req: Request, res: Response) => {
     };
 
     const coursesCommand = new QueryCommand(allCourses);
-    const { Items: courses } = await client.send(coursesCommand);
+    let { Items: courses } = await client.send(coursesCommand);
+    console.log(courses, req.query.courseType);
     // let courses = await prisma.course.findMany();
     // let data = await Promise.all(
     //   courses.map(async (course) => {
@@ -133,6 +134,13 @@ const handler = async (req: Request, res: Response) => {
     //   })
     // );
 
+    if (req.query.courseType !== "undefined") {
+      courses = courses.filter(
+        (e) => e.courseType["S"] === req.query.courseType
+      );
+    }
+
+    console.log("courses are", courses)
     const [some, others] = courses.reduce(
       ([p, f], e) =>
         productIDs.includes(e.id["S"]) ? [[...p, e], f] : [p, [...f, e]],
@@ -144,6 +152,8 @@ const handler = async (req: Request, res: Response) => {
       Object.keys(other).forEach((key) => {
         if (other[key].hasOwnProperty("S")) {
           otherItem[key] = other[key]["S"];
+        } else if (other[key].hasOwnProperty("SS")) {
+          otherItem[key] = other[key]["SS"];
         } else {
           otherItem[key] = other[key]["N"];
         }
@@ -159,6 +169,8 @@ const handler = async (req: Request, res: Response) => {
       Object.keys(other).forEach((key) => {
         if (other[key].hasOwnProperty("S")) {
           otherItem[key] = other[key]["S"];
+        } else if (other[key].hasOwnProperty("SS")) {
+          otherItem[key] = other[key]["SS"];
         } else {
           otherItem[key] = other[key]["N"];
         }
@@ -168,7 +180,6 @@ const handler = async (req: Request, res: Response) => {
     }
     , []);
 
-    // console.log(purchasedCourses, toPurchase);
     res.send({
       purchased: alreadyPurchases,
       others: toPurchase,

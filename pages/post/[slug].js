@@ -38,7 +38,7 @@ export default PostDetails;
 
 // Fetch data at build time
 export async function getStaticProps({ params }) {
-  console.log("called");
+  console.log("called 1");
   const data = await getPostDetails(params.slug);
   return {
     props: {

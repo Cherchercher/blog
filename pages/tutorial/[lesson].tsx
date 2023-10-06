@@ -1,6 +1,6 @@
 import { LockClosedIcon } from '@heroicons/react/outline';
 import { useEffect } from 'react';
-import { LessonResponse } from 'pages/api/lessons/[lesson]';
+import { LessonResponse } from 'pages/api/books/[book]';
 import useSWRImmutable from 'swr/immutable';
 import Plyr from "plyr-react";
 import "plyr-react/plyr.css"
@@ -52,10 +52,9 @@ const ErrorComponent = ( error?: String) => {
 };
 export default function LessonPage() {
   const router = useRouter();
-
-  const { lesson } = router.query;
+  const { lesson, courseType } = router.query;
   const { data, error } = useSWRImmutable<LessonResponse>(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/tutorials/${lesson}`,
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/tutorials/${lesson}?courseType=${courseType}`,
     fetcher,
   );
 
@@ -74,6 +73,7 @@ export default function LessonPage() {
 
   useEffect(() => {
    setCourseUrl(data?.mediaData[0].url);
+   if (courseType === 'SINGLE_VIDEO') {
    setVideoSrc({
     type: "video",
     sources: [
@@ -83,18 +83,29 @@ export default function LessonPage() {
       }
     ]
   })
+}
 }, [data])
 
+console.log(courseUrl, courseType, data?.mediaData);
+
 if (error) {
-  router.push(`error?error=${error.messae}`)
+  router.push(`error?error=${error.message}`)
 }
   return (
     <div className='flex flex-row'>
-      {data ? (
+      {data ?  data.mediaData &&  (
+        
+        // { data.mediaData && courseType === 'EBOOK' && 
+
+//         <object data={courseUrl} type="application/pdf" width="100%" height="100%">
+//     <p>Unable to display PDF file. <a href={courseUrl}>Download</a> instead.</p>
+// </object>
+// https://www.jotform.com/answers/4650040-fit-width-of-pdf-on-pdf-embedder-widget-to-screen-and-remove-its-preview
         <div className="flex-1 pl-6 my-0 grow-1">
-          { data.mediaData &&  <Plyr source={videoSrc} />}
-        </div>
-      ) : !error ? (
+          { data.mediaData && courseType === 'SINGLE_VIDEO' &&  <Plyr source={videoSrc} />}
+          { data.mediaData && courseType === 'EBOOK' && <a href={courseUrl}> Downdown the Ebook </a>}
+        </div>) 
+      : !error ? (
         <LoadingSkeleton />
       ) : (
         <ErrorComponent />

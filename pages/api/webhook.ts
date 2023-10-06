@@ -86,7 +86,7 @@ const handler = async (req, res) => {
         Item: {
           email: { S: email },
           accountType: { S: "BUYER" },
-          id: { S: v4() },
+          id: { S: id },
         },
         ReturnConsumedCapacity: "TOTAL",
         TableName: "User",

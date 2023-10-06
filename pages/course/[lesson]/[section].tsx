@@ -2,7 +2,7 @@ import { LockClosedIcon } from '@heroicons/react/outline';
 import { useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { LessonResponse } from 'pages/api/lessons/[lesson]';
+import { LessonResponse } from 'pages/api/books/[book]';
 import useSWRImmutable from 'swr/immutable';
 import Plyr from "plyr-react";
 import "plyr-react/plyr.css"

@@ -1,8 +1,16 @@
 import ProductList from "/components/tutorials/ProductList";
 import Jumbotron from "/components/tutorials/Jumbotron";
+import { Pricing } from '/components/course/Pricing';
+import { useRouter } from 'next/router';
+
 
 export default function Tutorials({products, isClassRoom = false}) {
+    const router = useRouter();
+    const { courseType } = router.query;
+
     return (
+        <>
+        { courseType === "SINGLE_VIDEO"? (
         <div className="container mx-auto px-10 mb-8">
             {(!isClassRoom) && <Jumbotron />}
             <div className="col-span-1 lg:col-span-4">
@@ -11,7 +19,9 @@ export default function Tutorials({products, isClassRoom = false}) {
                 </div>
             </div>
             <p>In Vancouver? Consider taking an <a href="https://skylinepole.vercel.app/">in person lesson</a> instead for personalized adjustments and spotting.</p>
-        </div>
+        </div> ) : <Pricing/> } 
+        
+        </>
 
 
     )
@@ -41,7 +51,6 @@ export const products = [
 ]
 
 export const getStaticProps = async (context) => {
-
     return {
         props: {
             products
