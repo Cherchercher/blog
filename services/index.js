@@ -2,10 +2,15 @@ import { request, gql } from 'graphql-request';
 
 const graphqlAPI = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT;
 
+
+//understand sorting
+// https://stackoverflow.com/questions/62119331/nested-sort-in-graphql,%20https://www.howtographql.com/graphql-js/8-filtering-pagination-and-sorting/,%20https://dgraph.io/docs/graphql/queries/order-page/,%20https://docs.amplify.aws/guides/api-graphql/query-with-sorting/q/platform/js/#implementation
+// refactor ebooks
+// https://stackoverflow.com/questions/67135460/sort-nested-json-array-of-objects
 export const getPosts = async () => {
   const query = gql`
     query MyQuery {
-      postsConnection {
+      postsConnection(orderBy: createdAt_DESC) {
         edges {
           cursor
           node {
@@ -35,7 +40,8 @@ export const getPosts = async () => {
   `;
 
   const result = await request(graphqlAPI, query);
-
+  console.log(result.postsConnection.edges);
+  //explain his please
   return result.postsConnection.edges;
 };
 
@@ -110,6 +116,7 @@ export const getSimilarPosts = async (categories, slug) => {
 };
 
 export const getAdjacentPosts = async (createdAt, slug) => {
+  //explain the datetime please
   const query = gql`
     query GetAdjacentPosts($createdAt: DateTime!,$slug:String!) {
       next:posts(
