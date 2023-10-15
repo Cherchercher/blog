@@ -85,7 +85,10 @@ const FeaturedPosts = () => {
         url: "/icon-transparent.png",
       },
       title: "Step-by-step guide to becoming a remote Software Engineer",
-      linkTo: "http://localhost:3000/tutorials?courseType=EBOOK",
+      linkTo:
+        process.env.NEXT_PUBLIC_PRODUCT_ENV == "LOCAL"
+          ? "http://localhost:3000/tutorials?courseType=EBOOK"
+          : "https://www.nomadichacker.com/tutorials?courseType=EBOOK",
       createdAt: "2023-08-21T08:11:00.631637+00:00",
     },
     {
@@ -99,7 +102,10 @@ const FeaturedPosts = () => {
         url: "/images/spatchcock.png",
       },
       title: "Advanced Pole: Spatchcock Tutorial",
-      linkTo: "http://localhost:3000/tutorials?courseType=SINGLE_VIDEO",
+      linkTo:
+        process.env.NEXT_PUBLIC_PRODUCT_ENV == "LOCAL"
+          ? "http://localhost:3000/tutorials?courseType=SINGLE_VIDEO"
+          : "https://www.nomadichacker.com/tutorials?courseType=SINGLE_VIDEO",
       createdAt: "2023-08-21T08:11:00.631637+00:00",
     },
   ];

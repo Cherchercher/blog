@@ -114,7 +114,7 @@ const handler = async (req: Request, res: Response) => {
       TableName: "Course",
       IndexName: "env-index",
       KeyConditionExpression: "env = :env",
-      ExpressionAttributeValues: { ":env": { S: process.env.PRODUCT_ENV } },
+      ExpressionAttributeValues: { ":env": { S: process.env.NEXT_PUBLIC_PRODUCT_ENV } },
     };
 
     const coursesCommand = new QueryCommand(allCourses);
