@@ -42,8 +42,8 @@ export const data = {
       price: "2",
       instructorId: "clj9n6mfz0000ml08m03c0x3k",
       imageRelativeUrl: "/images/booklet.png",
-      id: process.env.BOOKLET_PRODUCT_ID,
-      priceId: process.env.BOOKLET_PRICE_ID,
+      id: process.env.NEXT_PUBLIC_BOOKLET_PRODUCT_ID,
+      priceId: process.env.NEXT_PUBLIC_BOOKLET_PRICE_ID,
       pricingEnds: "2025-01-01  12:00:00 AM",
       pricing: "LIMITED TIME OFFER",
       salesPrice: "2",
@@ -53,11 +53,14 @@ export const data = {
     },
   ],
 };
+
 export const Pricing = () => {
   // let { data, error } = useSWR<LessonsResponse>(
   //   `${process.env.NEXT_PUBLIC_SERVER_URL}/api/lessons?courseType=EBOOK`,
   //   fetcher
   // );
+
+  
 
   return (
     <>
@@ -116,7 +119,7 @@ export const Pricing = () => {
                         ))}
                       </ul>
                       <form
-                        action={`/api/purchase?productId=prod_Olh01CD4k0d0eg&priceId=price_1Ny9cZEqnc7ZXyoypYSgSPrw`}
+                        action={`/api/purchase?productId=${course.id}&priceId=${course.priceId}`}
                         method="POST"
                       >
                           <button

@@ -88,7 +88,7 @@ const Header = () => {
             </Link>
                         <Link key='lessons-software' href='/tutorial/tutorials?courseType=EBOOK'>
                         <span className='md:float-right mt-2 align-middle  ml-4 font-semibold cursor-pointer'>
-                          Coding Lessons
+                          Learn Coding
                         </span>
                       </Link></>
           ) : (
@@ -100,7 +100,7 @@ const Header = () => {
             </Link>
             <Link key='tutorials-software' href='/tutorials?courseType=EBOOK'>
             <span className='md:float-right mt-2 align-middle  ml-4 font-semibold cursor-pointer'>
-            Coding Lessons
+            Learn Coding
             </span>
           </Link>
           </>
