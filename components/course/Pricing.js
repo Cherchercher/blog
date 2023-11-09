@@ -1,6 +1,5 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { CheckCircleIcon } from "@heroicons/react/outline";
-import LoadingSkeleton from '../LoadingSkeleton';
+import { CheckCircleIcon } from "@heroicons/react/24/outline"
 import React, { useEffect } from 'react';
 
 const tier = {

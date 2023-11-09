@@ -1,4 +1,3 @@
-import { LockClosedIcon } from "@heroicons/react/outline";
 import { useEffect } from "react";
 import { LessonResponse } from "pages/api/books/[book]";
 import useSWRImmutable from "swr/immutable";
