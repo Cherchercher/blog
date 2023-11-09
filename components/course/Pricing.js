@@ -1,5 +1,5 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { CheckCircleIcon } from "@heroicons/react/outline";
+import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import LoadingSkeleton from '../LoadingSkeleton';
 import React, { useEffect } from 'react';
 

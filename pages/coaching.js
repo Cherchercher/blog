@@ -1,53 +1,41 @@
 import ProductList from "/components/tutorials/ProductList";
 import Jumbotron from "/components/tutorials/Jumbotron";
 import { Pricing } from "/components/course/Pricing";
+import PricingTable from "/components/PricingTable";
 import { useRouter } from "next/router";
 
-const paragraphOne = () => {
-  <p>
-    <strong>Step-by-step tutorials </strong> to get that trick.
-  </p>;
-};
 
-const heading = () => {
-  <h2>Be Pole Strong</h2>;
-};
 
-const paragraphTwo = () => {
+const heading = () => <h2>Make 6 figures when you graduate</h2>;
+
+const paragraphTwo = () => (
   <p>
-    By <strong>Xpert certified, contortion trained</strong> poler
-  </p>;
-};
+    By <strong>MAANG</strong> Software Engineer
+  </p>
+);
 
 export default function Tutorials({ products, isClassRoom = false }) {
   const router = useRouter();
   const { courseType } = router.query;
+  console.log(isClassRoom);
 
   return (
     <>
-      {courseType === "SINGLE_VIDEO" ? (
-        <div className="container mx-auto px-10 mb-8">
-          {!isClassRoom && (
-            <Jumbotron
-              heading={heading}
-              paragraphOne={paragraphOne}
-              paragraphTwo={paragraphTwo}
-            />
-          )}
-          <div className="col-span-1 lg:col-span-4">
-            <div className="relative lg:sticky top-8 border-b border-secondaryShadow">
-              <ProductList products={products} />
-            </div>
-          </div>
-          <p>
-            In Vancouver? Consider taking an{" "}
-            <a href="https://skylinepole.vercel.app/">in person lesson</a>{" "}
-            instead for personalized adjustments and spotting.
-          </p>
+      <div className="container mx-auto px-10 mb-8">
+        {!isClassRoom && (
+          <Jumbotron
+            heading={heading}
+            paragraphTwo={paragraphTwo}
+          />
+        )}
+        <PricingTable />
+        <div className="col-span-1 lg:col-span-4">
+          {/* <div className="relative lg:sticky top-8 border-b border-secondaryShadow" >
+                <ProductList products={products}/>
+                </div> */}
         </div>
-      ) : (
-        <Pricing />
-      )}
+        {/* <p>In Vancouver? Consider taking an <a href="https://skylinepole.vercel.app/">in person lesson</a> instead for personalized adjustments and spotting.</p> */}
+      </div>
     </>
   );
 }
