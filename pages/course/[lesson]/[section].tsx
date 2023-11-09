@@ -1,5 +1,7 @@
 import { LockClosedIcon } from '@heroicons/react/outline';
 import { useEffect } from 'react';
+import Head from 'next/head';
+import Link from 'next/link';
 import { LessonResponse } from 'pages/api/lessons/[lesson]';
 import useSWRImmutable from 'swr/immutable';
 import Plyr from "plyr-react";
@@ -10,7 +12,47 @@ import { fetcher } from 'utils/SWRFetcher';
 import ContentLoader from 'react-content-loader';
 import { useRouter } from 'next/router';
 
-import TutorialParts from 'components/course/TutorialParts';
+import CourseParts from 'components/course/CourseParts';
+import { MediaStoreData } from 'aws-sdk';
+
+const components = {
+  Head,
+};
+
+const sectionItems = [
+  {
+    "title": "module 1",
+    "parts": [
+      {"title": "Part 1",
+        "mediaType": "video",
+        "duration": "2",
+        "durationUnit": "minute",
+        "href": "module1/part1"
+      },
+      {"title": "part 2",
+      "mediaType": "video",
+      "duration": "30",
+      "durationUnit": "minute",
+      "href": "module1/part2"
+      },
+      {"title": "Quiz",
+      "mediaType": "quiz",
+      "duration": "7",
+      "durationUnit": "question",
+      "href": "module1/part3"
+      }
+    ]
+  },
+    {"href": "test",
+    "title": "module 2"},
+    {"href": "test",
+    "title": "module 3"},
+    {"href": "test",
+    "title": "module 4"},
+    {"href": "test",
+    "title": "module 5"}
+]
+
 
 const LoadingSkeleton = () => {
   return (
@@ -53,14 +95,15 @@ const ErrorComponent = ( error?: String) => {
 export default function LessonPage() {
   const router = useRouter();
 
-  const { lesson } = router.query;
+  const { lesson, section } = router.query;
+  const [ clickedSection, setClickedSection ] = useState(0);
   const { data, error } = useSWRImmutable<LessonResponse>(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/tutorials/${lesson}`,
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/lessons/${lesson}`,
     fetcher,
   );
 
 
-  const [ courseUrl, setCourseUrl] = useState(data?.mediaData[0].url);
+  const [ courseUrl, setCourseUrl] = useState(data?.mediaData[0]["parts"][0].partUrl);
 
   const [ videoSrc, setVideoSrc ] = useState({
     type: "video",
@@ -72,19 +115,24 @@ export default function LessonPage() {
     ]
   });
 
+  const onSectionClicked = (i) => {
+    setClickedSection(i);
+  }
+
   useEffect(() => {
-   setCourseUrl(data?.mediaData[0].url);
+   setCourseUrl(data?.mediaData[0]["parts"][0].partUrl);
    setVideoSrc({
     type: "video",
     sources: [
       {
-        src: data?.mediaData[0].url,
+        src: data?.mediaData[0]["parts"][0].partUrl,
         type: "video/mp4"
       }
     ]
   })
 }, [data])
 
+console.log(data);
 if (error) {
   router.push(`error?error=${error.messae}`)
 }
@@ -103,9 +151,25 @@ if (error) {
 <aside className='bg-gray-100 md:w-60 basis-48 shrink-0 grow-0'>
   <nav>
     <ul>
-      {data?.mediaData && (
-            <TutorialParts lesson={lesson} parts={data?.mediaData}/>
-      )}
+      {data?.mediaData?.map( ({name, parts}, i) => (
+        parts && parts.length > 0 && (    
+          <div onClick={() => onSectionClicked(i)}>
+           <li className='m-2' key={name}>
+              <Link href={`/course/${lesson}/${i}`}>
+                <a
+                  className={`flex p-2 bg-primaryShadow rounded hover:bg-gray-400 cursor-pointer`}
+                >
+                  {name}
+                </a>
+              </Link>
+            </li>
+        
+        {/* { parts.map( ({partName, partType, partUrl}, j) => ( */}
+        
+           
+            <CourseParts lesson={lesson} parts={parts} active={clickedSection == i? true: false}/>
+        {/* ))} */}
+         </ div> ) ) )}
     </ul>
   </nav>
 </aside>

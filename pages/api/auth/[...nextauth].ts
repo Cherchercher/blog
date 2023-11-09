@@ -7,7 +7,7 @@ import { DynamoDBAdapter } from "@next-auth/dynamodb-adapter";
 
 const config: DynamoDBClientConfig = {
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
+    accessKeyId: process.env.AWS_ACCESS_KEY as string,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
   },
   region: process.env.AWS_REGION,
@@ -62,7 +62,7 @@ export const authOptions: NextAuthOptions = {
         //   console.log(e);
         // }
   
-        console.log(url, "in auth sending");
+        console.log(url);
         const { host } = new URL(url);
         // console.log(host);
         // const transport = nodemailer.createTransport(server);

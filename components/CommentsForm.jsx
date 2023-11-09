@@ -35,7 +35,6 @@ const CommentsForm = ({ slug }) => {
   const handlePostSubmission = () => {
     setError(false);
     const { name, email, comment, storeData } = formData;
-    console.log(name, email, comment, slug, storeData, "data is")
     if (!name || !email || !comment) {
       setError(true);
       return;
@@ -94,7 +93,7 @@ const CommentsForm = ({ slug }) => {
       {error && <p className="text-xs text-red-500">All fields are mandatory</p>}
       <div className="mt-8">
         <button type="button" onClick={handlePostSubmission} className="transition duration-500 ease hover:bg-indigo-900 inline-block bg-pink-600 text-lg font-medium rounded-full  px-8 py-3 cursor-pointer">Post Comment</button>
-        {showSuccessMessage && <span className="text-xl float-right font-semibold mt-3 text-green-500">Comment published. Thanks for your support</span>}
+        {showSuccessMessage && <span className="text-xl float-right font-semibold mt-3 text-green-500">Comment submitted for review</span>}
       </div>
     </div>
   );

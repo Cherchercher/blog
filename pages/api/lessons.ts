@@ -11,7 +11,7 @@ import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 // this is getting all courses
 const config: DynamoDBClientConfig = {
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
+    accessKeyId: process.env.AWS_ACCESS_KEY as string,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
   },
   region: process.env.AWS_REGION,
@@ -28,7 +28,6 @@ const client = DynamoDBDocument.from(new DynamoDB(config), {
 interface Request extends NextApiRequest {
   query: {
     lesson: string;
-    courseType: string;
   };
 }
 
@@ -47,9 +46,9 @@ const handler = async (req: Request, res: Response) => {
 
     if (
       !session || session?.expires
-        ? isAfter(new Date(), parseISO(session.expires)) : true
+        ? isAfter(new Date(), parseISO(session.expires))
+        : true
     ) {
-      // res.redirect(401, "/login");
       res.writeHead(401, { Location: "/login" }).end();
       return;
     }
@@ -110,16 +109,16 @@ const handler = async (req: Request, res: Response) => {
     );
 
     const productIDs = purchasedCourses.map((purchase) => purchase.productId);
+
     const allCourses = {
       TableName: "Course",
       IndexName: "env-index",
       KeyConditionExpression: "env = :env",
-      ExpressionAttributeValues: { ":env": { S: process.env.NEXT_PUBLIC_PRODUCT_ENV } },
+      ExpressionAttributeValues: { ":env": { S: "TEST" } },
     };
 
     const coursesCommand = new QueryCommand(allCourses);
-    let { Items: courses } = await client.send(coursesCommand);
-    console.log(courses, req.query.courseType);
+    const { Items: courses } = await client.send(coursesCommand);
     // let courses = await prisma.course.findMany();
     // let data = await Promise.all(
     //   courses.map(async (course) => {
@@ -134,13 +133,6 @@ const handler = async (req: Request, res: Response) => {
     //   })
     // );
 
-    if (req.query.courseType !== "undefined") {
-      courses = courses.filter(
-        (e) => e.courseType["S"] === req.query.courseType
-      );
-    }
-
-    console.log("courses are", courses)
     const [some, others] = courses.reduce(
       ([p, f], e) =>
         productIDs.includes(e.id["S"]) ? [[...p, e], f] : [p, [...f, e]],
@@ -152,8 +144,6 @@ const handler = async (req: Request, res: Response) => {
       Object.keys(other).forEach((key) => {
         if (other[key].hasOwnProperty("S")) {
           otherItem[key] = other[key]["S"];
-        } else if (other[key].hasOwnProperty("SS")) {
-          otherItem[key] = other[key]["SS"];
         } else {
           otherItem[key] = other[key]["N"];
         }
@@ -169,8 +159,6 @@ const handler = async (req: Request, res: Response) => {
       Object.keys(other).forEach((key) => {
         if (other[key].hasOwnProperty("S")) {
           otherItem[key] = other[key]["S"];
-        } else if (other[key].hasOwnProperty("SS")) {
-          otherItem[key] = other[key]["SS"];
         } else {
           otherItem[key] = other[key]["N"];
         }
@@ -180,6 +168,7 @@ const handler = async (req: Request, res: Response) => {
     }
     , []);
 
+    // console.log(purchasedCourses, toPurchase);
     res.send({
       purchased: alreadyPurchases,
       others: toPurchase,

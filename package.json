@@ -18,8 +18,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.386.0",
-    "@headlessui/react": "^1.7.17",
-    "@heroicons/react": "^2.0.16",
+    "@heroicons/react": "^1.0.5",
     "@next-auth/dynamodb-adapter": "^3.0.2",
     "@prisma/client": "^4.10.1",
     "aws-sdk": "^2.1336.0",
@@ -44,14 +43,7 @@
     "react-multi-carousel": "^2.6.5",
     "sass": "^1.42.1",
     "stripe": "^12.9.0",
-    "swr": "^1.0.1",
-    "@tailwindcss/forms": "^0.5.3",
-    "@vvo/tzdb": "^6.105.0",
-    "clsx": "^1.2.1",
-    "date-fns-tz": "^2.0.0",
-    "lru-cache": "^8.0.4",
-    "zod": "^3.21.4",
-    "tailwind-merge": "^1.10.0"
+    "swr": "^1.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

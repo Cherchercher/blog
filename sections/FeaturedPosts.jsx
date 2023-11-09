@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
+import React, { useState, useEffect } from 'react';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 
-import { FeaturedPostCard } from "../components";
-import { getFeaturedPosts } from "../services";
+import { FeaturedPostCard } from '../components';
+import { getFeaturedPosts } from '../services';
 
 const responsive = {
   superLargeDesktop: {
@@ -37,94 +37,26 @@ const FeaturedPosts = () => {
 
   const customLeftArrow = (
     <div className="absolute arrow-btn left-0 text-center py-3 cursor-pointer bg-pink-600 rounded-full">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-6 w-6  w-full"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M10 19l-7-7m0 0l7-7m-7 7h18"
-        />
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6  w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
       </svg>
     </div>
   );
 
   const customRightArrow = (
     <div className="absolute arrow-btn right-0 text-center py-3 cursor-pointer bg-pink-600 rounded-full">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-6 w-6  w-full"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M14 5l7 7m0 0l-7 7m7-7H3"
-        />
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6  w-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
       </svg>
     </div>
   );
 
-  const fakePosts = [
-    {
-      author: {
-        name: "Cher Huang",
-        photo: {
-          url: "https://media.graphassets.com/jrDbDbPbTB2pCusSGo4b",
-        },
-      },
-      featuredImage: {
-        url: "/icon-transparent.png",
-      },
-      title: "Step-by-step guide to becoming a remote Software Engineer",
-      linkTo:
-        process.env.NEXT_PUBLIC_PRODUCT_ENV == "LOCAL"
-          ? "http://localhost:3000/tutorials?courseType=EBOOK"
-          : "https://www.nomadichacker.com/tutorials?courseType=EBOOK",
-      createdAt: "2023-08-21T08:11:00.631637+00:00",
-    },
-    {
-      author: {
-        name: "Cher Huang",
-        photo: {
-          url: "https://media.graphassets.com/jrDbDbPbTB2pCusSGo4b",
-        },
-      },
-      featuredImage: {
-        url: "/images/spatchcock.png",
-      },
-      title: "Advanced Pole: Spatchcock Tutorial",
-      linkTo:
-        process.env.NEXT_PUBLIC_PRODUCT_ENV == "LOCAL"
-          ? "http://localhost:3000/tutorials?courseType=SINGLE_VIDEO"
-          : "https://www.nomadichacker.com/tutorials?courseType=SINGLE_VIDEO",
-      createdAt: "2023-08-21T08:11:00.631637+00:00",
-    },
-  ];
   return (
     <div className="mb-8">
-      <Carousel
-        infinite
-        customLeftArrow={customLeftArrow}
-        customRightArrow={customRightArrow}
-        responsive={responsive}
-        itemClass="px-4"
-      >
-        {fakePosts.map((post, _) => (
-          <FeaturedPostCard key={post.linkTo} post={post} />
+      <Carousel infinite customLeftArrow={customLeftArrow} customRightArrow={customRightArrow} responsive={responsive} itemClass="px-4">
+        {dataLoaded && featuredPosts.map((post, index) => (
+          <FeaturedPostCard key={index} post={post} />
         ))}
-        {dataLoaded &&
-          featuredPosts.map((post, index) => (
-            <FeaturedPostCard key={index} post={post} />
-          ))}
       </Carousel>
     </div>
   );

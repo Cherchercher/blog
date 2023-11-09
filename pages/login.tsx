@@ -1,75 +1,26 @@
+import { getCsrfToken, getProviders } from "next-auth/react";
 import { useForm } from "react-hook-form";
-import Spinner from "../components/Spinner";
-import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-function Login({ csrfToken }) {
+export default function Login({ csrfToken }) {
   const {
     register,
     formState: { errors },
   } = useForm();
 
-  const [modal, setModal] = useState("available");
   const router = useRouter();
-
-  const {data} = router.query
-
-
-  useEffect(() => {
-    if (router.query?.data) {
-      handleSubmit(router.query.data);
-    }
-  
-  }, [data]);
-
-
-  function handleSubmit(formData) {
-      console.log(formData);
-    setModal("busy");
-    fetch(`/api/request`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: formData,
-    })
-      .then(async (data) => {
-        const json = await data.json();
-        console.log(json);
-        if (json.success) {
-          router.push("/confirmation");
-        } else {
-          setModal("error");
-        }
-      })
-      .catch(() => {
-        setModal("error");
-      });
-  }
 
   return (
     <>
       <div className="w-full mx-auto md:py-32 py-16 flex flex-col items-center justify-center">
         <div className="sm:mx-auto rounded-lg mt-10">
           <h2 className="text-center text-3xl leading-9">
-            {router.query?.purchaseSuccess == "true" &&
-            modal === "busy" &&
-            router.query?.data && (
-              <>
-                Submitting your schedule request ... <Spinner className="ml-2" />
-              </>
-            )}
-            {modal === "error" && (
-              <div className="bg-red-50 text-red-600">
-                There was an error submitting your request. Please reach out to cherhuang@goplanatrip.com
-              </div>
-            )}
-            {!router.query?.data && router.query?.purchaseSuccess == "true" && (
+            {router.query?.purchaseSuccess == "true" && (
               <>
                 Thanks for your purchase! <br />
-                Log in to the course platform
               </>
             )}
+            Log in to the course platform
           </h2>
 
           <div className="sm:mt-8 mt-4 sm:mx-auto sm:w-full sm:max-w-xl">
@@ -123,14 +74,12 @@ function Login({ csrfToken }) {
   );
 }
 
-export default Login;
+Login.getInitialProps = async (context) => {
+  const providers = await getProviders();
+  const csrfToken = await getCsrfToken(context);
 
-// Login.getInitialProps = async (context) => {
-//   const providers = await getProviders();
-//   const csrfToken = await getCsrfToken(context);
-
-//   return {
-//     providers,
-//     csrfToken,
-//   };
-// };
+  return {
+    providers,
+    csrfToken,
+  };
+};

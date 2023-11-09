@@ -4,14 +4,14 @@ import { getSession } from 'next-auth/react';
 import AWS from 'aws-sdk';
 
 import {
-  QueryCommand
+  DynamoDBClient,
+  GetItemCommand,
 } from '@aws-sdk/client-dynamodb';
-
 
 import { DynamoDB, DynamoDBClientConfig } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 
-const config: DynamoDBClientConfig = {
+const ddbconfig: DynamoDBClientConfig = {
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY as string,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
@@ -19,14 +19,13 @@ const config: DynamoDBClientConfig = {
   region: process.env.AWS_REGION,
 };
 
-const client = DynamoDBDocument.from(new DynamoDB(config), {
+const client = DynamoDBDocument.from(new DynamoDB(ddbconfig), {
   marshallOptions: {
     convertEmptyValues: true,
     removeUndefinedValues: true,
     convertClassInstanceToMap: true,
   },
 })
-
 interface Request extends NextApiRequest {
   query: {
     lesson: string;
@@ -47,36 +46,25 @@ const handler = async (req: Request, res: Response) => {
       ? isAfter(new Date(), parseISO(session.expires))
       : true;
 
-
     const email = session?.user?.email;
 
-    const params = {
-      TableName: "User",
-      IndexName: "email-accountType-index",
-      KeyConditionExpression: "email = :email and accountType = :accountType",
-      ExpressionAttributeValues: {
-        ":email": { S: email },
-        ":accountType": { S: "BUYER" },
-      },
-    };
+    const { Item } = await client.send(
+      new GetItemCommand({
+        TableName: "User",
+        Key: {
+          email: { S: "xiaoxuah@uci.edu" },
+          type: { S: "BUYER"}
+        }
+      })
+    );
 
-    const command = new QueryCommand(params);
+    // const isPaidUser = email
+    //   ? await prisma.user.findUnique({
+    //       where: { email },
+    //     })
+    //   : false;
 
-    const { Items: userItems } = await client.send(command);
-
-    let isPaidUser = true;
-    if (userItems.length === 0) {
-      isPaidUser = true
-    }
-
-
-    if (!isPaidUser || isSessionExpired) {
-      return res.send({
-        mediaData: null,
-      });
-    }
-
-    
+    //   console.log(req.query);
 
     //read from s3
     const s3 = new AWS.S3({
@@ -88,15 +76,12 @@ const handler = async (req: Request, res: Response) => {
   
     // The id from the route (e.g. /img/abc123987)
     // let filename = query.id;
-    // bucket is the "course"_ + cousename nomadichacker
-    // key is the section_number_part_number
+    //bucket is the "course"_ + cousename nomadichacker
+    //key is the section_number_part_number
   
-    console.log("query is", req?.query);
-    const bucket = req?.query?.tutorial;
+    const bucket = req?.query?.lesson;
 
-    console.log("bucket is", bucket)
-
-    const listObjects = (Bucket) => {
+    const listDirectories = (Bucket) => {
       return new Promise ((resolve, reject) => {
         const s3params = {
           Bucket,
@@ -111,9 +96,25 @@ const handler = async (req: Request, res: Response) => {
       });
     };
 
-    const result = await listObjects(bucket);
+    const result = await listDirectories(bucket);
 
-    console.log(result);
+    const listParts = (Bucket, Prefix) => {
+      return new Promise ((resolve, reject) => {
+        const s3params = {
+          Bucket: Bucket,
+          Delimiter: '/',
+          Prefix
+        };
+        s3.listObjectsV2 (s3params, (err, data) => {
+          if (err) {
+            reject (err);
+          }
+          resolve (data);
+        });
+      });
+    };
+
+  let mediaData = Array(result.CommonPrefixes.length).fill({"name": "", "parts": []});
 
 
     const getSignedUrl = function(key, bucket) {
@@ -130,20 +131,39 @@ const handler = async (req: Request, res: Response) => {
     }
 
 
-    let mediaData = [];
   
     await Promise.all(
-      result.Contents.map(async (data, i) => {
-          mediaData.push({name: data.key, url:  await getSignedUrl(data.Key, bucket) })
-      })
-    );
+      result.CommonPrefixes.map(async (section, i) => {
+        const parts = await listParts(bucket, section.Prefix);
+        await Promise.all(parts.Contents.map(async (part, j) => {
+        const keys = part.Key.split("/");
+          if (keys.length > 1) {
+            const [ partName, partType ] = keys[1].split(".");
+            if (partName != '') {
+              const partUrl = await getSignedUrl(part.Key, bucket);
+              mediaData[i]["parts"].push({partName, partType, partUrl});
+              mediaData[i]["name"] = keys[0];
+            }
+          }
+      }))
+    }));
+
+    if (!isPaidUser || isSessionExpired) {
+      return res.send({
+        mediaData: null,
+      });
+     
+    }
+    //display necessary mesage
+
+    console.log("media data is", mediaData)
 
     res.send({
       mediaData
     });
   } catch (error) {
     console.log(error);
-    // res.redirect(`/error?error=${error.message}`)
+    res.redirect(`/error?error=${error.message}`)
 
   }
 };

@@ -18,7 +18,7 @@ import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 // this is getting all courses
 const ddbconfig: DynamoDBClientConfig = {
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
+    accessKeyId: process.env.AWS_ACCESS_KEY as string,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
   },
   region: process.env.AWS_REGION,
@@ -86,7 +86,7 @@ const handler = async (req, res) => {
         Item: {
           email: { S: email },
           accountType: { S: "BUYER" },
-          id: { S: id },
+          id: { S: v4() },
         },
         ReturnConsumedCapacity: "TOTAL",
         TableName: "User",
