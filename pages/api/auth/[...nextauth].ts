@@ -62,7 +62,7 @@ export const authOptions: NextAuthOptions = {
         //   console.log(e);
         // }
   
-        console.log(url);
+        console.log(url, "in auth sending");
         const { host } = new URL(url);
         // console.log(host);
         // const transport = nodemailer.createTransport(server);

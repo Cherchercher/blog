@@ -1,3 +1,4 @@
+import { LockClosedIcon } from "@heroicons/react/outline";
 import { useEffect } from "react";
 import { LessonResponse } from "pages/api/books/[book]";
 import useSWRImmutable from "swr/immutable";
@@ -84,8 +85,6 @@ export default function LessonPage() {
     }
   }, [data]);
 
-  console.log(courseUrl, courseType, data?.mediaData);
-
   if (error) {
     router.push(`error?error=${error.message}`);
   }
@@ -169,7 +168,7 @@ export default function LessonPage() {
       ) : !error ? (
         <LoadingSkeleton />
       ) : (
-        <ErrorComponent />
+        <ErrorComponent error={error.message}/>
       )}
 
       <aside className="bg-gray-100 md:w-60 basis-48 shrink-0 grow-0">
