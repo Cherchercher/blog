@@ -1,7 +1,7 @@
 import React, { useRef } from'react';
 import { Menu, Transition } from '@headlessui/react';
 
-const Dropdown = ({ name, url, subItems, useHover }) => {
+const Dropdown = ({ name, url, subItems, answer, useHover, isQuestion }) => {
     const buttonRef = useRef(null)
     const dropdownRef = useRef(null)
     const timeoutDuration = 1600
@@ -70,14 +70,15 @@ const Dropdown = ({ name, url, subItems, useHover }) => {
               leaveTo="transform opacity-0 scale-95"
             >
               <Menu.Items
-                className="absolute right-0 mt-2 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                className={!isQuestion && "absolute right-0 mt-2 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"}
                 ref={dropdownRef}
                 onMouseEnter={() => useHover && onMouseEnter()}
                 onMouseLeave={() => useHover && onMouseLeave(open)}
                 static
               >
                 <div className="px-1 py-1 ">
-                  {subItems.map(item => (
+                  {answer && (<p>{answer} </p>)}
+                  {subItems?.map(item => (
                     <Menu.Item key={item.key}>
                       {({ active }) => (
                         <a

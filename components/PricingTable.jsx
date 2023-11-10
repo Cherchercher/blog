@@ -79,7 +79,7 @@ function PricingTab(props) {
             <span className="text-slate-900 dark:text-slate-200 font-bold text-4xl">
               {props.yearly ? props.price.yearly : props.price.monthly}
             </span>
-            <span className="text-slate-500 font-medium">/mo</span>
+            {/* <span className="text-slate-500 font-medium">/mo</span> */}
           </div>
           <div className="text-sm text-slate-500 mb-5">
             {props.planDescription}
@@ -200,13 +200,13 @@ Position yourself to winning with 1:1 coaching session.
             ></span>
           </span>
           <button
-            className={`relative flex-1 text-sm font-medium h-8 rounded-full focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-300 dark:focus-visible:ring-slate-600 transition-colors duration-150 ease-in-out ${
+            className={`relative flex-3 text-sm font-medium h-8 rounded-full focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-300 dark:focus-visible:ring-slate-600 transition-colors duration-150 ease-in-out ${
               yearly ? "text-white" : "text-slate-500 dark:text-slate-400"
             }`}
             onClick={() => setYearly(true)}
             aria-pressed={false}
           >
-            Yearly{" "}
+            Early Bird{" "}
             <span
               className={`${
                 yearly
@@ -214,10 +214,10 @@ Position yourself to winning with 1:1 coaching session.
                   : "text-slate-400 dark:text-slate-500"
               }`}
             >
-              -20%
+              -30%
             </span>
           </button>
-          <button
+          {/* <button
             className={`relative flex-1 text-sm font-medium h-8 rounded-full focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-300 dark:focus-visible:ring-slate-600 transition-colors duration-150 ease-in-out ${
               yearly ? "text-slate-500 dark:text-slate-400" : "text-white"
             }`}
@@ -225,7 +225,7 @@ Position yourself to winning with 1:1 coaching session.
             aria-pressed={true}
           >
             Monthly
-          </button>
+          </button> */}
         </div>
       </div>
       <div className="max-w-sm mx-auto grid gap-6 lg:grid-cols-3 items-start lg:max-w-none">
@@ -280,44 +280,40 @@ Position yourself to winning with 1:1 coaching session.
           ]}
         />
       </div>
-
+        
+      <h2 className="pt-5 text-2xl">Q&A</h2>
       <Menu as="div" className="z-10 mt-2 align-middle ml-4 ">
         <Dropdown
-          name={"I'm not a college grad, is this course for Me?"}
-          url={"someURL"}
-          subItems={LessonsSubItems}
+          name={"I'm not a new grad, is this program for me?"}
+          answer={"You don't have to be a new grad to join. If you are looking to land a job in the big five: Amazon, Meta, Google, Netflix, Microsoft, this program is for you! Experienced engineers are more likely to get interviews."}
           useHover={false}
         />
       </Menu>
       <Menu as="div" className="z-10 mt-2 align-middle ml-4">
         <Dropdown
           name={"How long does it take to prep for my tech interview?"}
-          url={"someURL"}
-          subItems={LessonsSubItems}
+          answer={"Typcially one would spend 3 months preping for interviews. Program participants typically schedule their sessions one month ahead of their interviews. Ultimately it's up to your own pace and we are here to accelerate your learning."}
           useHover={false}
         />
       </Menu>
       <Menu as="div" className="z-10 mt-2 align-middle ml-4 ">
         <Dropdown
           name={"How many mock interviews should I do?"}
-          url={"someURL"}
-          subItems={LessonsSubItems}
+          answer={"3 is typically what people goes for. The final rounds of interviews consists of 5 consecutive interviews, so If you'd like to emulate the full interview scenerio, 5 is recommended."}
           useHover={false}
         />
       </Menu>
       <Menu as="div" className="z-10 mt-2 align-middle ml-4">
         <Dropdown
           name={"Do I get a referral?"}
-          url={"someURL"}
-          subItems={LessonsSubItems}
+          answer={"I can recommend candidates based on their skills and ability. I also give strong recommendations for people that I've worked with. Shoot me an email at cherhuang@goplanatrip.com to check on open projects!"}
           useHover={false}
         />
       </Menu>
       <Menu as="div" className="z-10 mt-2 align-middle ml-4 ">
         <Dropdown
           name={"Can you help me revise my resume?"}
-          url={"someURL"}
-          subItems={LessonsSubItems}
+          answer={"Yes. It's included in the delux package. It's also available as an add on to any purchased package."}
           useHover={false}
         />
       </Menu>
@@ -326,8 +322,7 @@ Position yourself to winning with 1:1 coaching session.
           name={
             "I have no previous internship/work experience. Can I get an interview?"
           }
-          url={"someURL"}
-          subItems={LessonsSubItems}
+          answer={"Yes it is possible! Many of my colleagues in non Computer Science major got hired with no prior work experience. "}
           useHover={false}
         />
       </Menu>
