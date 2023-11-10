@@ -1,8 +1,8 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import EmailProvider from 'next-auth/providers/email';
+import { createTransport } from "nodemailer"
 import { DynamoDB, DynamoDBClientConfig } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
-import { SMTPClient } from 'emailjs';
 import { DynamoDBAdapter } from "@next-auth/dynamodb-adapter";
 
 const config: DynamoDBClientConfig = {
@@ -74,27 +74,54 @@ export const authOptions: NextAuthOptions = {
         //   html: html({ url, host, email }),
         // });
 
-        const client = new SMTPClient({
-          host: process.env.EMAIL_SERVER_HOST,
-          // @ts-ignore
-          port: process.env.EMAIL_SERVER_PORT,
-          ssl: true,
-          user: process.env.EMAIL_SERVER_USER,
-          password: process.env.EMAIL_SERVER_PASSWORD,
+let transporter = createTransport({
+   host: process.env.EMAIL_SERVER_HOST,
+   port: process.env.EMAIL_SERVER_PORT,
+   secure: true,
+   auth: {
+       user: process.env.EMAIL_SERVER_USER,
+       pass: process.env.EMAIL_SERVER_PASSWORD
+   }
+})
+
+        // const client = new SMTPClient({
+        //   host: process.env.EMAIL_SERVER_HOST,
+        //   // @ts-ignore
+        //   port: process.env.EMAIL_SERVER_PORT,
+        //   ssl: true,
+        //   user: process.env.EMAIL_SERVER_USER,
+        //   password: process.env.EMAIL_SERVER_PASSWORD,
+        // });
+
+        const res = await transporter.sendMail({
+          from: "cherhuang@goplanatrip.com", // verified sender email
+          to: email, // recipient email
+          subject: `Sign in to ${host}`, // Subject line
+          text: text({ url, host }), // plain text body
         });
 
-        client.send(
-          {
-            text: text({ url, host }),
-            attachment: [{data: html({ url, host, email }), alternative: true}],
-            to: email,
-            from: "cherhuang@goplanatrip.com",
-            subject: `Sign in to ${host}`,
-          },
-          (err, message) => {
-            console.log(err || message);
-          }
-        )
+        console.log(res);
+        // function(error, info){
+        // if (error) {
+        //   console.log(error);
+        // } else {
+        //   console.log('Email sent: ' + info.response);
+        // }
+        // });
+
+
+        // client.send(
+        //   {
+        //     text: text({ url, host }),
+        //     attachment: [{data: html({ url, host, email }), alternative: true}],
+        //     to: email,
+        //     from: "cherhuang@goplanatrip.com",
+        //     subject: `Sign in to ${host}`,
+        //   },
+        //   (err, message) => {
+        //     console.log(err || message); 
+        //   }
+        // )
       },
     }),
   ],

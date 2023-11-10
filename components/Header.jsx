@@ -195,15 +195,27 @@ const Header = () => {
                 Purchased Lessons
               </span>
             </Link>
+            <Menu
+                as="div"
+                className="z-10 md:float-right mt-2 align-middle ml-4 font-semibold"
+              >
+                <Dropdown
+                  name={"Pole Fitness"}
+                  url={"/tutorials?courseType=SINGLE_VIDEO"}
+                  subItems={PoleSubItems}
+                  useHover={true}
+                />
+              </Menu>
+
               <Menu
                 as="div"
                 className="z-10 md:float-right mt-2 align-middle ml-4 font-semibold"
               >
                 <Dropdown
-                  name={"Software Engineering"}
-                  url={"someURL"}
-                  subItems={AuthTechSubItems}
-                  useHover={true}
+                name={"Software Engineering"}
+                url={"/tutorials?courseType=EBOOK"}
+                subItems={TechSubItems}
+                useHover={true}
                 />
               </Menu>
             </>

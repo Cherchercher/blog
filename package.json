@@ -24,7 +24,6 @@
     "@prisma/client": "^4.10.1",
     "aws-sdk": "^2.1336.0",
     "date-fns": "^2.25.0",
-    "emailjs": "^4.0.1",
     "graphql": "^15.6.1",
     "graphql-request": "^3.5.0",
     "html-react-parser": "^1.4.0",
