@@ -2,8 +2,9 @@ import { useForm } from "react-hook-form";
 import Spinner from "../components/Spinner";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { getCsrfToken, getProviders } from "next-auth/react";
 
-function Login({ csrfToken }) {
+export default function Login({ csrfToken }) {
   const {
     register,
     formState: { errors },
@@ -123,14 +124,12 @@ function Login({ csrfToken }) {
   );
 }
 
-export default Login;
+Login.getInitialProps = async (context) => {
+  const providers = await getProviders();
+  const csrfToken = await getCsrfToken(context);
 
-// Login.getInitialProps = async (context) => {
-//   const providers = await getProviders();
-//   const csrfToken = await getCsrfToken(context);
-
-//   return {
-//     providers,
-//     csrfToken,
-//   };
-// };
+  return {
+    providers,
+    csrfToken,
+  };
+};

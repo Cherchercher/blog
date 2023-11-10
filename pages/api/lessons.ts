@@ -98,6 +98,7 @@ const handler = async (req: Request, res: Response) => {
         };
         const courseCommand = new QueryCommand(courseParams);
         const { Items: courses } = await client.send(courseCommand);
+        if (courses?.length !==0 ) {
         return {
           ...purchase,
           userId: purchase.userId["S"],
@@ -106,10 +107,11 @@ const handler = async (req: Request, res: Response) => {
           courseBucket: courses[0].courseBucket["S"],
           imageRelativeUrl: courses[0].imageRelativeUrl["S"],
         };
+      }
       })
     );
 
-    const productIDs = purchasedCourses.map((purchase) => purchase.productId);
+    const productIDs = purchasedCourses.filter((p)=> p!= undefined).map((purchase) => purchase.productId);
     const allCourses = {
       TableName: "Course",
       IndexName: "env-index",

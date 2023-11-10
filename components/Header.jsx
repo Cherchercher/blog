@@ -80,17 +80,20 @@ const Header = () => {
   //     url: "/tutorials?courseType=SINGLE_VIDEO",
   //   },
   // ];
-  // const AuthTechSubItems = [
-  //   {
-  //     key: "remoteWork",
-  //     name: "Guide to Remote Work",
-  //     url: "/tutorials?courseType=EBOOK",
-  //   },
-  //   {
-  //     key: "interviewCoaching",
-  //     name: "Interview Coaching",
-  //   },
-  // ];
+  const AuthTechSubItems = [
+    {
+      key: "remoteWork",
+      name: "Guide to Remote Work",
+      url: "/tutorials?courseType=EBOOK",
+    },
+    {
+      key: "interviewCoaching",
+      name: "Interview Coaching",
+      url: "/coaching",
+      //go to calendar schedule page to schedule more sessions if user has purchased and has credits left
+      // can also add additional sessions on top of existing package (upsell)
+    },
+  ];
 
   // url: "tutorials?courseType=SINGLE_VIDEO",
   // , {
@@ -186,12 +189,12 @@ const Header = () => {
           ))}
 
           {status === "authenticated" ? (
-            // <Link key='lessons' href='/course/lessons'>
-            //   <span className='md:float-right mt-2 align-middle  ml-4 font-semibold cursor-pointer'>
-            //     Lessons
-            //   </span>
-            // </Link>
-            <>
+             <>
+            <Link key='lessons' href='/tutorial/tutorials'>
+              <span className='md:float-right mt-2 align-middle  ml-4 font-semibold cursor-pointer'>
+                Purchased Lessons
+              </span>
+            </Link>
               <Menu
                 as="div"
                 className="z-10 md:float-right mt-2 align-middle ml-4 font-semibold"
