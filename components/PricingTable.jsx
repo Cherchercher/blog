@@ -72,13 +72,25 @@ function PricingTab(props) {
           <div className="text-slate-900 dark:text-slate-200  mb-1">
             {props.planName}
           </div>
+          
           <div className="inline-flex items-baseline mb-2">
             <span className="text-slate-900 dark:text-slate-200 font-bold text-3xl">
               $
             </span>
-            <span className="text-slate-900 dark:text-slate-200 font-bold text-4xl">
+            {/* <span className="text-slate-900 dark:text-slate-200 font-bold text-4xl">
               {props.yearly ? props.price.yearly : props.price.monthly}
-            </span>
+            </span> */}
+
+            {/* <div className="mt-4"> */}
+                          <h3 className="ml-3 inline-flex line-through font-bold text-2xl italic text-red-500 font-semibold tracking-wid">
+                            {props.price.yearly}
+                          </h3>
+                        
+                        <h3 className="ml-1 text-3xl inline-flex font-semibold tracking-wid">
+                          {props.price.sales}
+                        </h3>
+                      {/* </div> */}
+
             {/* <span className="text-slate-500 font-medium">/mo</span> */}
           </div>
           <div className="text-sm text-slate-500 mb-5">
@@ -187,9 +199,9 @@ Position yourself to winning with 1:1 coaching session.
         {!data && !error && <LoadingSkeleton />}
         {error && <ErrorComponent error={error} />}
       </div>
-      <div className="flex justify-center max-w-[14rem] m-auto mb-8 lg:mb-16">
+      <div className="flex justify-center max-w-[14rem] mx-auto lg:mb-4">
         <div className="relative flex w-full p-1 bg-white dark:bg-slate-900 rounded-full">
-          <span
+          {/* <span
             className="absolute inset-0 m-1 pointer-events-none"
             aria-hidden="true"
           >
@@ -198,8 +210,8 @@ Position yourself to winning with 1:1 coaching session.
                 yearly ? "translate-x-0" : "translate-x-full"
               }`}
             ></span>
-          </span>
-          <button
+          </span> */}
+          {/* <button
             className={`relative flex-3 text-sm font-medium h-8 rounded-full focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-300 dark:focus-visible:ring-slate-600 transition-colors duration-150 ease-in-out ${
               yearly ? "text-white" : "text-slate-500 dark:text-slate-400"
             }`}
@@ -216,7 +228,10 @@ Position yourself to winning with 1:1 coaching session.
             >
               -30%
             </span>
-          </button>
+          </button> */}
+                      <h3 className="inline-flex px-4 py-1 rounded-full text-sm font-semibold tracking-wide uppercase bg-indigo-100 text-indigo-600 mr-1">
+                          Early Bird 30% off
+                        </h3>
           {/* <button
             className={`relative flex-1 text-sm font-medium h-8 rounded-full focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-300 dark:focus-visible:ring-slate-600 transition-colors duration-150 ease-in-out ${
               yearly ? "text-slate-500 dark:text-slate-400" : "text-white"
@@ -234,11 +249,11 @@ Position yourself to winning with 1:1 coaching session.
           yearly={yearly}
           planName="Basic Package"
           href={`/meet?programName=Basic%20Interview%20Coaching%20Program&productId=${process.env.NEXT_PUBLIC_BASIC_INTERVIEW_PRODUCT_ID}&priceId=${process.env.NEXT_PUBLIC_BASIC_INTERVIEW_PRICE_ID}`}
-          price={{ yearly: 129, monthly: 35 }}
+          price={{ yearly: 129, monthly: 35, sales: 90 }}
           planDescription="Best for candidates looking for a quick refresher on a specific interview type."
           features={[
             "One-hour mock interview",
-            "Choice of coding, system design, or behavioral",
+            "Choice of techical or behavioral interview",
             "Expert FAANG+ interviewer",
             "Personalized feedback",
             "Option for complete anonymity",
@@ -251,7 +266,7 @@ Position yourself to winning with 1:1 coaching session.
           popular={true}
           planName="Complete Package"
           href={`/meet?programName=Complete%20Interview%20Coaching%20Program&productId=${process.env.NEXT_PUBLIC_COMPLETE_INTERVIEW_PRODUCT_ID}&priceId=${process.env.NEXT_PUBLIC_COMPLETE_INTERVIEW_PRICE_ID}`}
-          price={{ yearly: 529, monthly: 55 }}
+          price={{ yearly: 529, monthly: 55, sales: 370 }}
           planDescription="Ideal for candidates wanting to best emulate a full interview loop."
           features={[
             "Personalized prep plans",
@@ -269,13 +284,14 @@ Position yourself to winning with 1:1 coaching session.
           yearly={yearly}
           planName="Delux Package"
           href={`/meet?programName=Delux%20Interview%20Coaching%20Program&productId=${process.env.NEXT_PUBLIC_DELUX_INTERVIEW_PRODUCT_ID}&priceId=${process.env.NEXT_PUBLIC_DELUX_INTERVIEW_PRICE_ID}`}
-          price={{ yearly: 899, monthly: 85 }}
+          price={{ yearly: 899, monthly: 85, sales: 630 }}
           planDescription="Everything in Complete Package, plus 1:1 technical + behaviour interview tips session"
           features={[
             "Everything in Complete Package",
-            "1 The Secret to Nailing the Behavior Inteview Session",
-            "1 Technical Interview Tips Session",
+            "The Secret to Nailing the Behavior Interview Session",
+            "Technical Interview Tips Session",
             "5 one-hour mock interviews",
+            "Resume review",
             "Contineous support till the day of your interview",
           ]}
         />
@@ -323,6 +339,13 @@ Position yourself to winning with 1:1 coaching session.
             "I have no previous internship/work experience. Can I get an interview?"
           }
           answer={"Yes it is possible! Many of my colleagues in non Computer Science major got hired with no prior work experience. "}
+          useHover={false}
+        />
+      </Menu>
+      <Menu as="div" className="z-10 mt-2 align-middle ml-4">
+        <Dropdown
+          name={"I want to work in start-ups instead. Can you help?"}
+          answer={"Shoot me a message cherhuang@goplanatrip.com. I have extensive experience working at startups and can help you land your first jobs!"}
           useHover={false}
         />
       </Menu>
